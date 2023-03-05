@@ -66,7 +66,7 @@ async def data_sync():
         logger.info("检测到数据文件夹, 即将进行数据更新")
         try:
             with open(data_path_lst[0] + "git.json", "r", encoding="utf-8") as f:
-                lastest_commit = json.loads(f.read())["lastest_commit"]
+                local_commit = json.loads(f.read())["lastest_commit"]
         except FileNotFoundError:
             lastest_commit = None
         except json.JSONDecodeError:
@@ -75,12 +75,16 @@ async def data_sync():
 
         try:
             lastest_commit = await g.get_lastest_commit()
+            info = f"最新commit: {lastest_commit}, 本地commit: {local_commit}"
+            if(local_commit != lastest_commit):
+                info += " (数据需要更新)"
+            logger.info(info)
         except Exception as e:
             logger.error(e)
             logger.error("获取最新commit失败")
             return
         
-        if lastest_commit != lastest_commit:
+        if local_commit != lastest_commit:
             try: 
                 await g.sync_data(sync_ls)
                 with open(data_path_lst[0] + "git.json", "w", encoding="utf-8") as f:
