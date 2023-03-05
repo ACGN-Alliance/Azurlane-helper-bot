@@ -9,16 +9,17 @@ from nonebot.adapters.onebot.v11 import MessageEvent, GroupMessageEvent, Private
 from src.plugins.checker.start_checker import init
 from src.plugins.func_helper import *
 from src.plugins.utils import send_forward_msg
+from src.plugins.sync import data_sync
 
 import json
 
 # 数据操作部分 #
 update_data = on_command("更新数据", permission=SUPERUSER)
 @update_data.handle()
-async def _(matcher: Matcher):
+async def _():
     await update_data.send("正在更新数据...")
-    await matcher.append_handler(init)
-    await matcher.append_handler(await update_data.finish("更新完成"))
+    await data_sync()
+    await update_data.send("更新完成")
 
 # 黑名单管理 #
 async def clear_blacklist() -> Message:

@@ -139,6 +139,6 @@ dmypy.json
 .pytype/
 
 # other
-.data/
+data/
 
 # End of https://www.toptal.com/developers/gitignore/api/python
