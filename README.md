@@ -5,6 +5,8 @@
 
 > <b>该Bot功能有诸多问题,想实装请等待正式的[release](https://github.com/MRSlouzk/Azurlane-helper-bot/releases),当然咱随时欢迎[issues](https://github.com/MRSlouzk/Azurlane-helper-bot/issues)</b>
 
+> 作者学业繁忙, 更新速度会很慢, 请谅解
+
 ## 功能
 - :ship: 模拟建造(支持轻型重型特型以及限定池)
 
