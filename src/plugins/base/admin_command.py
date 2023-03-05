@@ -7,9 +7,9 @@ from nonebot.matcher import Matcher
 from nonebot.adapters.onebot.v11 import MessageEvent, GroupMessageEvent, PrivateMessageEvent, Bot, Message
 
 from src.plugins.checker.start_checker import init
-from src.plugins.func_helper import *
+from src.plugins.base.func_helper import *
 from src.plugins.utils import send_forward_msg
-from src.plugins.sync import data_sync
+from src.plugins.base.sync import data_sync
 
 import json
 

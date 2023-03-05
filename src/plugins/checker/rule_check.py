@@ -1,8 +1,14 @@
 from nonebot.typing import T_State
-from nonebot.adapters.onebot.v11 import MessageEvent, GroupMessageEvent, PrivateMessageEvent, Bot
+from nonebot.adapters.onebot.v11 import (MessageEvent, 
+                                         GroupMessageEvent, 
+                                         PrivateMessageEvent, 
+                                         GroupIncreaseNoticeEvent,
+                                         NoticeEvent,
+                                         Event,
+                                         Bot)
 import json
 
-async def event_handle(event: MessageEvent, bot: Bot, state: T_State) -> bool:
+async def event_handle(event: Event, bot: Bot, state: T_State) -> bool:
     """
     事件处理器
 
@@ -39,9 +45,25 @@ async def event_handle(event: MessageEvent, bot: Bot, state: T_State) -> bool:
         else:
             await bot.send_group_msg(group_id=event.group_id, message="本群没有权限使用此命令")
             return False
-    else:
+    elif(isinstance(event, PrivateMessageEvent)):
         if user_check(event.user_id):
             return True
         else:
             await bot.send_private_msg(user_id=event.user_id, message="您没有权限使用此命令")
             return False
+        
+    else:
+        return True
+
+async def notice_handle(event: NoticeEvent):
+    if(isinstance(event, GroupIncreaseNoticeEvent)):
+        text = json.load(open("data/azurlane/group_func.json", "r", encoding="utf-8"))
+        if(event.group_id in text["group_welcome"]): return True
+        else: return False
+    else:
+        return True
+
+async def chat_handle(event: MessageEvent):
+    text = json.load(open("data/azurlane/group_func.json", "r", encoding="utf-8"))
+    if(event.group_id in text["group_chat"]): return True
+    else: return False

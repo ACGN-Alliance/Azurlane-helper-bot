@@ -1,7 +1,7 @@
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot import get_driver
 
-from src.plugins.sync import data_sync
+from src.plugins.base.sync import data_sync
 
 driver = get_driver()
 @driver.on_bot_connect
