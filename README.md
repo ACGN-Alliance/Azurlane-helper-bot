@@ -9,7 +9,6 @@
 
 ## 功能
 - :ship: 模拟建造(支持轻型重型特型以及限定池)
-- 碧蓝航线官方B站动态推送(可开关)
 
 ## 实用功能
 - :black_large_square: 各功能的黑名单
@@ -17,9 +16,10 @@
 - :smile: 基础关键词回复
 
 ## TODO
+- 碧蓝航线官方B站动态推送(预计使用[bilibili-api](https://github.com/Nemo2011/bilibili-api)+PIL实现)
 - 为建造模拟器建造结果添加舰船图标
-- 添加国内镜像数据源
-- 助手插件功能迁移
+- 添加国内镜像数据源(Gitee)
+- 助手插件功能迁移(脱离playwright进行使用)
 
 ## 联系方式
 - Issues: 提交代码建议/bug 
