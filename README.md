@@ -3,7 +3,7 @@
 
 > <b>该 Bot 正在开发中，请等待完善，最新开发进度请见 [dev分支](https://github.com/ACGN-Alliance/Azurlane-helper-bot/tree/dev)</b>  
 
-> <b>该 Bot 功能有诸多问题，请等待正式的 [Release](https://github.com/MRSlouzk/Azurlane-helper-bot/releases),当然咱随时欢迎 [Issues](https://github.com/MRSlouzk/Azurlane-helper-bot/issues)</b> 
+> <b>该 Bot 功能有诸多问题，请等待正式的 [Release](https://github.com/MRSlouzk/Azurlane-helper-bot/releases)，当然咱随时欢迎 [Issues](https://github.com/MRSlouzk/Azurlane-helper-bot/issues)</b> 
 
 > 作者学业繁忙, 更新速度会很慢, 请谅解
 
