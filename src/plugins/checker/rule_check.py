@@ -55,15 +55,35 @@ async def event_handle(event: Event, bot: Bot, state: T_State) -> bool:
     else:
         return True
 
-async def notice_handle(event: NoticeEvent):
-    if(isinstance(event, GroupIncreaseNoticeEvent)):
-        text = json.load(open("data/azurlane/group_func.json", "r", encoding="utf-8"))
-        if(event.group_id in text["group_welcome"]): return True
-        else: return False
+async def _if_exist_func(data: dict, file: str, key: str):
+    if(data.get(key) is None):
+        data.update({key: []})
+        open(file, "w", encoding="utf-8").write(json.dumps(data))
+        return False
     else:
         return True
 
+async def notice_handle(event: NoticeEvent):
+    if(isinstance(event, GroupIncreaseNoticeEvent)):
+        text = json.load(open("data/azurlane/group_func.json", "r", encoding="utf-8"))
+        _if = await _if_exist_func(text, "data/azurlane/group_func.json", "group_welcome")
+        if not _if: return False
+        if(event.group_id in text["group_welcome"]): return True
+        else: return False
+    else:
+        return False
+
 async def chat_handle(event: MessageEvent):
+    if(not isinstance(event, GroupMessageEvent)): return False
     text = json.load(open("data/azurlane/group_func.json", "r", encoding="utf-8"))
+    _if = await _if_exist_func(text, "data/azurlane/group_func.json", "group_chat")
+    if not _if: return False
     if(event.group_id in text["group_chat"]): return True
+    else: return False
+
+async def bili_handle(event: MessageEvent):
+    text = json.load(open("data/azurlane/group_func.json", "r", encoding="utf-8"))
+    _if = await _if_exist_func(text, "data/azurlane/group_func.json", "bili")
+    if not _if: return False
+    if(event.group_id in text["bili"]): return True
     else: return False

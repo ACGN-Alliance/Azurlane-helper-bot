@@ -40,7 +40,7 @@ sync_ls = [
 ]
 
 other_ls =[
-    "work_bank/defalut.json",
+    "work_bank/default.json",
 ]
 
 async def data_sync():
@@ -50,7 +50,7 @@ async def data_sync():
             os.makedirs(path)
             is_inited = True
 
-    data_file = ["data/azurlane/group.json", "data/azurlane/user.json", "data/azurlane/group_cmd.json"]
+    data_file = ["data/azurlane/group.json", "data/azurlane/user.json", "data/azurlane/group_cmd.json", "data/azurlane/group_func.json", "data/bili/latest.json"]
     for file in data_file:
         if not os.path.exists(file):
             with open(file, "w", encoding="utf-8") as f:
