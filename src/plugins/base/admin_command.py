@@ -18,8 +18,10 @@ update_data = on_command("更新数据", permission=SUPERUSER)
 @update_data.handle()
 async def _():
     await update_data.send("正在更新数据...")
-    await data_sync()
-    await update_data.send("更新完成")
+    if(await data_sync()):
+        await update_data.send("更新完成")
+    else:
+        await update_data.send("更新失败, 请检查后台输出")
 
 # 黑名单管理 #
 async def clear_blacklist() -> Message:
