@@ -32,7 +32,7 @@ if(get_driver().config.dict().get("regular_update") is not None and not get_driv
                     return
                 cid = res[1]
                 img = f"base64://{b64encode(res[0]).decode()}"
-                data = json.load(open("data/azurlane/group_func.json", "r", encoding="utf-8"))
+                data = json.load(open("data/group_func.json", "r", encoding="utf-8"))
                 if(data.get("bili") is not None):
                     for group in data["bili"]:
                         await bot.send_group_msg(group_id=group, message=f"碧蓝航线官方更新专栏({cid}):")

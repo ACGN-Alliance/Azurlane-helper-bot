@@ -37,6 +37,6 @@ async def _(bot: Bot, event: MessageEvent):
 ver = on_command("版本")
 @ver.handle()
 async def _():
-    data = json.load(open("data/azurlane/git.json", "r", encoding="utf-8").read())
+    data = json.load(open("data/git.json", "r", encoding="utf-8").read())
     com = data["lastest_commit"]
     await ver.finish(f"当前版本: {__version__}\n数据版本: {com[:6]}")

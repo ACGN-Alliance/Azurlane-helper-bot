@@ -25,8 +25,8 @@ async def _():
 
 # 黑名单管理 #
 async def clear_blacklist() -> Message:
-    group_data = json.load(open("data/azurlane/group.json", "r", encoding="utf-8"))
-    user_data = json.load(open("data/azurlane/user.json", "r", encoding="utf-8"))
+    group_data = json.load(open("data/group.json", "r", encoding="utf-8"))
+    user_data = json.load(open("data/user.json", "r", encoding="utf-8"))
     for k in group_data.keys():
         group_data[k] = []
     for k in user_data.keys():
@@ -36,8 +36,8 @@ async def clear_blacklist() -> Message:
 
 async def add_blacklist(type: str, id: str, func: str = None) -> Message:
     if(not id.isdigit()): return Message("号码必须为数字")
-    if(type == "群"): data = json.load(open("data/azurlane/group.json", "r", encoding="utf-8"))
-    elif(type == "人"): data = json.load(open("data/azurlane/user.json", "r", encoding="utf-8"))
+    if(type == "群"): data = json.load(open("data/group.json", "r", encoding="utf-8"))
+    elif(type == "人"): data = json.load(open("data/user.json", "r", encoding="utf-8"))
     else: return Message("参数错误")
 
     if(not func):
@@ -48,13 +48,13 @@ async def add_blacklist(type: str, id: str, func: str = None) -> Message:
             data[func].append(int(id))
         else:
             data[func] = [int(id)]
-    json.dump(data, open("data/azurlane/group.json" if(type == "群") else "data/azurlane/user.json", "w", encoding="utf-8"))    
+    json.dump(data, open("data/group.json" if(type == "群") else "data/user.json", "w", encoding="utf-8"))    
     return Message("添加完成")
 
 async def del_blacklist(type: str, id: str, func: str = None) -> Message:
     if(not id.isdigit()): return Message("号码必须为数字")
-    if(type == "群"): data = json.load(open("data/azurlane/group.json", "r", encoding="utf-8"))
-    elif(type == "人"): data = json.load(open("data/azurlane/user.json", "r", encoding="utf-8"))
+    if(type == "群"): data = json.load(open("data/group.json", "r", encoding="utf-8"))
+    elif(type == "人"): data = json.load(open("data/user.json", "r", encoding="utf-8"))
     else: return Message("参数错误")
 
     if(not func):
@@ -67,13 +67,13 @@ async def del_blacklist(type: str, id: str, func: str = None) -> Message:
                 data[func].remove(int(id))
         else:
             return Message("不存在参数名")
-    json.dump(data, open("data/azurlane/group.json" if(type == "群") else "data/azurlane/user.json", "w", encoding="utf-8"))    
+    json.dump(data, open("data/group.json" if(type == "群") else "data/azurlane/user.json", "w", encoding="utf-8"))    
     return Message("删除完成")
 
 async def check_blacklist(type: str, id: str, func: str = None) -> Message:
     if(not id.isdigit()): return Message("号码必须为数字")
-    if(type == "群"): data = json.load(open("data/azurlane/group.json", "r", encoding="utf-8"))
-    elif(type == "人"): data = json.load(open("data/azurlane/user.json", "r", encoding="utf-8"))
+    if(type == "群"): data = json.load(open("data/group.json", "r", encoding="utf-8"))
+    elif(type == "人"): data = json.load(open("data/user.json", "r", encoding="utf-8"))
     else: return Message("参数错误")
 
     banned_list = []

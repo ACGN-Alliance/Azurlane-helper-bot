@@ -7,7 +7,13 @@ from src.plugins.exception import RemoteFileNotExistsException
 driver = get_driver()
 
 class GithubHook(object):
-    url_prefix = 'https://api.github.com/repos/MRSlouzk/nonebot-plugin-azurlane-assistant-data/'
+    if(driver.config.download_source == "github"):
+        url_prefix = 'https://api.github.com/repos/MRSlouzk/nonebot-plugin-azurlane-assistant-data/'
+    elif(driver.config.download_source == "gitee"):
+        url_prefix = 'https://gitee.com/mrslouzk/nonebot-plugin-azurlane-assistant-data/'
+    else:
+        url_prefix = 'https://api.github.com/repos/MRSlouzk/nonebot-plugin-azurlane-assistant-data/'
+        
     root_path = "data/"
 
     def __init__(self):
@@ -45,34 +51,33 @@ class GithubHook(object):
 
 async def data_sync():
     is_need_inited = False
-    data_path_lst = ["data/azurlane/data/", "data/word_bank"]
+    data_path_lst = ["data/azurlane/", "data/word_bank"]
     for path in data_path_lst:
         if not os.path.exists(path):
             os.makedirs(path)
             is_need_inited = True
 
-    data_file = ["data/azurlane/group.json", "data/azurlane/user.json", "data/azurlane/group_cmd.json", "data/azurlane/group_func.json", "data/bili/latest.json"]
+    data_file = ["data/group.json", "data/user.json", "data/group_cmd.json", "data/group_func.json", "data/bili/latest.json"]
     for file in data_file:
         if not os.path.exists(file):
             with open(file, "w", encoding="utf-8") as f:
                 f.write(json.dumps({}))
 
     g = GithubHook()
-    if not os.path.exists("data/azurlane/data/sync.json"):
-        try:
-            data = await g.sync_data(["sync.json"], _path="")
-            with open("data/azurlane/sync.json", "w", encoding="utf-8") as f:
-                f.write(json.dumps(data))
-        except Exception as e:
-            logger.error(e + "\n获取同步列表失败, 已终止数据同步")
-            return False
+    try:
+        data = await g.sync_data(["sync.json"], _path="")
+        with open("data/sync.json", "w", encoding="utf-8") as f:
+            f.write(json.dumps(data))
+    except Exception as e:
+        logger.error(e + "\n获取同步列表失败, 已终止数据同步")
+        return False
 
     if is_need_inited:
         logger.warning("未检测到数据文件夹, 即将进入初始化")
         try: 
-            sync = json.load(open("data/azurlane/sync.json", "r", encoding="utf-8").read())
+            sync = json.load(open("data/sync.json", "r", encoding="utf-8").read())
             await g.sync_data(sync["default"])
-            with open(data_path_lst[0] + "git.json", "w", encoding="utf-8") as f:
+            with open("data/git.json", "w", encoding="utf-8") as f:
                 f.write(json.dumps({"lastest_commit": await g.get_lastest_commit()}))
             logger.info("初始化完成")
         except RemoteFileNotExistsException as e:
@@ -84,7 +89,7 @@ async def data_sync():
     else:
         logger.info("检测到数据文件夹, 即将进行数据更新")
         try:
-            with open(data_path_lst[0] + "git.json", "r", encoding="utf-8") as f:
+            with open("data/git.json", "r", encoding="utf-8") as f:
                 local_commit = json.loads(f.read())["lastest_commit"]
         except FileNotFoundError:
             lastest_commit = None
@@ -105,7 +110,7 @@ async def data_sync():
         if local_commit != lastest_commit:
             try: 
                 await g.sync_data(sync["default"])
-                with open(data_path_lst[0] + "git.json", "w", encoding="utf-8") as f:
+                with open("data/git.json", "w", encoding="utf-8") as f:
                     f.write(json.dumps({"lastest_commit": lastest_commit}))
                 logger.info("数据更新完成")
             except RemoteFileNotExistsException as e:

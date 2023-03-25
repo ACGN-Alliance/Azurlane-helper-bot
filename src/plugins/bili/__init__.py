@@ -19,7 +19,7 @@ async def _(event: GroupMessageEvent, arg: Message = CommandArg()):
     args = arg.extract_plain_text().split()
     if(len(args) == 0): await bili_sub.finish("用法: bili订阅 开启|关闭")
     if(args[0] == "开启"):
-        _if = await read_and_add_list("data/azurlane/group_func.json", "bili", event.group_id)
+        _if = await read_and_add_list("data/group_func.json", "bili", event.group_id)
         if(not _if): await bili_sub.finish("本群已启用bili订阅")
         await bili_sub.finish("开启成功")
     elif(args[0] == "关闭"):

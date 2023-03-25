@@ -14,11 +14,11 @@
 - :black_large_square: 各功能的黑名单
 - :1234: 自动化数据同步
 - :smile: 基础关键词回复
+- :dvd: Gitee 国内镜像源数据
 
 ## TODO
 - 碧蓝航线官方B站动态推送(预计使用 [bilibili-api](https://github.com/Nemo2011/bilibili-api) + PIL 实现)
 - 为建造模拟器建造结果添加舰船图标
-- 添加国内镜像数据源( Gitee )
 - 助手插件功能迁移(脱离 Playwright 进行使用)
 - 一键启动脚本( lgc2333 大佬提供的灵感)
 - 上架 Nonebot 商店

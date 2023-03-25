@@ -43,6 +43,10 @@ async def build_simulator(bot: Bot, event: MessageEvent,arg: Message = CommandAr
     for data in result:
         ship_name = data["ship"]
         prob = data["probability"]
-        msg = Message(f"舰娘: {ship_name}\n稀有度: {prob}")
+        img_url = data["img_url"]
+        try:
+            msg = Message(f"舰娘: {ship_name}\n稀有度: {prob}") + MessageSegment.image(img_url)
+        except:
+            await bsm.finish("获取舰船图标失败, 取消本次抽取")
         msg_lst.append(msg)
     await send_forward_msg(bot, event, "建造模拟器", str(event.user_id), msg_lst)
