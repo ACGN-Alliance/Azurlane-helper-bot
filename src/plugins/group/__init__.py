@@ -25,7 +25,7 @@ msg = on_message(rule=chat_handle, priority=99)
 async def _(bot: Bot, event: MessageEvent):
 
     # 监测默认关键词并回复
-    kw_lst = json.load(open("data/work_bank/default.json", "r", encoding="utf-8").read())
+    kw_lst = json.load(open("data/work_bank/default.json", "r", encoding="utf-8"))
     for kw in kw_lst:
         if(event.get_plaintext().find(kw) != -1):
             await msg.finish(kw_lst[kw])
@@ -37,6 +37,6 @@ async def _(bot: Bot, event: MessageEvent):
 ver = on_command("版本")
 @ver.handle()
 async def _():
-    data = json.load(open("data/git.json", "r", encoding="utf-8").read())
+    data = json.load(open("data/git.json", "r", encoding="utf-8"))
     com = data["lastest_commit"]
     await ver.finish(f"当前版本: {__version__}\n数据版本: {com[:6]}")

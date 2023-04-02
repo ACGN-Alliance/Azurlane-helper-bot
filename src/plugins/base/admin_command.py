@@ -14,6 +14,7 @@ from src.plugins.json_utils import read_and_write_key
 from src.plugins.base.sync import data_sync
 
 import json
+from typing import List
 
 # 数据操作部分 #
 update_data = on_command("更新数据", permission=SUPERUSER)
@@ -57,7 +58,7 @@ async def clear_blacklist():
 
     return Message("清空完成")
 
-async def add_blacklist(type: str, id: str, func: str = None) -> Message:
+async def add_blacklist(type: str, id: str, func: str = "") -> Message:
     if(not id.isdigit()): return Message("号码必须为数字")
     if(type == "群"): data = json.load(open("data/group.json", "r", encoding="utf-8"))
     elif(type == "人"): data = json.load(open("data/user.json", "r", encoding="utf-8"))
@@ -74,7 +75,7 @@ async def add_blacklist(type: str, id: str, func: str = None) -> Message:
     json.dump(data, open("data/group.json" if(type == "群") else "data/user.json", "w", encoding="utf-8"))    
     return Message("添加完成")
 
-async def del_blacklist(type: str, id: str, func: str = None) -> Message:
+async def del_blacklist(type: str, id: str, func: str = "") -> Message:
     if(not id.isdigit()): return Message("号码必须为数字")
     if(type == "群"): data = json.load(open("data/group.json", "r", encoding="utf-8"))
     elif(type == "人"): data = json.load(open("data/user.json", "r", encoding="utf-8"))
@@ -93,7 +94,7 @@ async def del_blacklist(type: str, id: str, func: str = None) -> Message:
     json.dump(data, open("data/group.json" if(type == "群") else "data/azurlane/user.json", "w", encoding="utf-8"))    
     return Message("删除完成")
 
-async def check_blacklist(type: str, id: str, func: str = None) -> Message:
+async def check_blacklist(type: str, id: str, func: str = "") -> List[Message] | Message | None:
     if(not id.isdigit()): return Message("号码必须为数字")
     if(type == "群"): data = json.load(open("data/group.json", "r", encoding="utf-8"))
     elif(type == "人"): data = json.load(open("data/user.json", "r", encoding="utf-8"))
@@ -104,15 +105,17 @@ async def check_blacklist(type: str, id: str, func: str = None) -> Message:
         for k in data.keys():
             if(int(id) in data[k]):
                 banned_list.append(Message(f"{type}{id}的{k}功能被禁用"))
-        return Message("不存在")
+        if(len(banned_list) == 0):
+            return Message("不存在")
     else:
         if(func in data.keys()):
             if(int(id) in data[func]):
-                return banned_list.append(Message(f"{type}{id}的{k}功能被禁用"))
+                banned_list.append(Message(f"{type}{id}的{func}功能被禁用"))
             else:
                 return Message("不存在")
         else:
             return Message("不存在参数名")
+    return banned_list
 
 blacklist = on_command("黑名单", permission=SUPERUSER)
 @blacklist.handle()
@@ -133,7 +136,13 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, args: Message = Com
         elif arg[0] == "删除":
             await matcher.finish(await del_blacklist(arg[1], arg[2]))
         elif arg[0] == "查询":
-            await send_forward_msg(bot, event, "封禁查询", event.user_id, await check_blacklist(arg[1], arg[2]))
+            lst = await check_blacklist(arg[1], arg[2])
+            if(isinstance(lst, Message)):
+                await matcher.finish(lst)
+            elif(isinstance(lst, list)):
+                await send_forward_msg(bot, event, "封禁查询", str(event.user_id), lst)
+            else:
+                await matcher.finish()
         else:
             await matcher.finish("参数错误")
     elif(len(arg) == 4):
@@ -142,7 +151,13 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, args: Message = Com
         elif arg[0] == "删除":
             await matcher.finish(await del_blacklist(arg[1], arg[2], arg[3]))
         elif arg[0] == "查询":
-            await send_forward_msg(bot, event, "封禁查询", event.user_id, await check_blacklist(arg[1], arg[2], arg[3]))
+            lst = await check_blacklist(arg[1], arg[2])
+            if(isinstance(lst, Message)):
+                await matcher.finish(lst)
+            elif(isinstance(lst, list)):
+                await send_forward_msg(bot, event, "封禁查询", str(event.user_id), lst)
+            else:
+                await matcher.finish()
         else:
             await matcher.finish("参数错误")
     else:

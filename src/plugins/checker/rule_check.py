@@ -81,7 +81,7 @@ async def chat_handle(event: MessageEvent):
     if(event.group_id in text["group_chat"]): return True
     else: return False
 
-async def bili_handle(event: MessageEvent):
+async def bili_handle(event: GroupMessageEvent):
     text = json.load(open("data/group_func.json", "r", encoding="utf-8"))
     _if = await _if_exist_func(text, "data/group_func.json", "bili")
     if not _if: return False

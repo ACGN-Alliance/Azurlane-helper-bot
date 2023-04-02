@@ -9,11 +9,13 @@ driver = get_driver()
 
 class GithubHook(object):
     if(config.download_source == "github"):
-        url_prefix = 'https://api.github.com/repos/MRSlouzk/nonebot-plugin-azurlane-assistant-data/'
+        # url_prefix = 'https://api.github.com/repos/MRSlouzk/nonebot-plugin-azurlane-assistant-data/'
+        url_prefix = 'https://api.github.com/repositories/578098474/'
     elif(config.download_source == "gitee"):
         url_prefix = 'https://gitee.com/mrslouzk/nonebot-plugin-azurlane-assistant-data/'
     else:
-        url_prefix = 'https://api.github.com/repos/MRSlouzk/nonebot-plugin-azurlane-assistant-data/'
+        # url_prefix = 'https://api.github.com/repos/MRSlouzk/nonebot-plugin-azurlane-assistant-data/'
+        url_prefix = 'https://api.github.com/repositories/578098474/'
         
     root_path = "data/"
 
@@ -28,9 +30,11 @@ class GithubHook(object):
 
         """
         url = self.url_prefix + 'commits'
-        r = httpx.get(url)
-        if(r.status_code == 403): raise Exception("Github API请求过于频繁")
-        if(r.status_code != 200): raise Exception("Github API出错")
+        if(config.PROXY): r = httpx.get(url, proxies=config.PROXY)
+        else: r = httpx.get(url)
+        if(r.status_code == 403): raise Exception("检测更新时Github API请求过于频繁")
+        # logger.error(f"检测更新时状态码:{r.status_code}")
+        if(not(r.status_code == 200 or r.status_code == 301)): raise Exception("检测更新时Github API出错")
         return r.json()[0]['sha']
     
     async def sync_data(self, sync_list: list, _path: str = ""):
@@ -40,16 +44,18 @@ class GithubHook(object):
         """
         for path in sync_list:
             url = self.url_prefix + 'contents/' + path
+            r = None
             try:
-                if(config.PROXY): httpx.get(url, proxies=config.PROXY)
+                if(config.PROXY): r = httpx.get(url, proxies=config.PROXY)
                 else: r = httpx.get(url)
-            except Exception:
-                raise Exception("Github API请求失败, 请检查代理设置")
-            if(r.status_code == 404): raise RemoteFileNotExistsException(path)
-            elif(r.status_code != 200): raise Exception("Github API出错")
-            logger.info(r.status_code)
-            content = base64.b64decode(r.json()['content'])
-            open(self.root_path + _path + path, "w", encoding="utf-8").write(content.decode("utf-8"))
+            except Exception as e:
+                raise Exception(f"Github API请求失败, 错误原因:{e}")
+            if(r is not None):
+                # logger.info(r.status_code)
+                if(r.status_code == 404): raise RemoteFileNotExistsException(path)
+                elif(r.status_code != 200): raise Exception("Github API出错")
+                content = base64.b64decode(r.json()['content'])
+                open(self.root_path + _path + path, "w", encoding="utf-8").write(content.decode("utf-8"))
 
 async def data_sync():
     is_need_inited = False
@@ -67,17 +73,15 @@ async def data_sync():
 
     g = GithubHook()
     try:
-        data = await g.sync_data(["sync.json"], _path="")
-        with open("data/sync.json", "w", encoding="utf-8") as f:
-            f.write(json.dumps(data))
+        await g.sync_data(["sync.json"], _path="")
     except Exception as e:
-        logger.error(str(e) + "\n获取同步列表失败, 已终止数据同步")
+        logger.error(str(e) + "===获取同步列表失败, 已终止数据同步")
         return False
 
     if is_need_inited:
         logger.warning("未检测到数据文件夹, 即将进入初始化")
         try: 
-            sync = json.load(open("data/sync.json", "r", encoding="utf-8").read())
+            sync = json.load(open("data/sync.json", "r", encoding="utf-8"))
             await g.sync_data(sync["default"])
             with open("data/git.json", "w", encoding="utf-8") as f:
                 f.write(json.dumps({"lastest_commit": await g.get_lastest_commit()}))
@@ -86,10 +90,11 @@ async def data_sync():
             logger.error(e)
             return False
         except Exception as e:
-            logger.error(e + "\n初始化失败, 请删除data文件夹后重试")
+            logger.error(str(e) + "\n初始化失败, 请删除data文件夹后重试")
             return False
     else:
         logger.info("检测到数据文件夹, 即将进行数据更新")
+        local_commit = None
         try:
             with open("data/git.json", "r", encoding="utf-8") as f:
                 local_commit = json.loads(f.read())["lastest_commit"]
@@ -106,11 +111,12 @@ async def data_sync():
                 info += " (数据需要更新)"
             logger.info(info)
         except Exception as e:
-            logger.error(e + "\n获取最新commit失败")
+            logger.error(str(e) + "\n获取最新commit失败")
             return False
         
         if local_commit != lastest_commit:
             try: 
+                sync = json.load(open("data/sync.json", "r", encoding="utf-8"))
                 await g.sync_data(sync["default"])
                 with open("data/git.json", "w", encoding="utf-8") as f:
                     f.write(json.dumps({"lastest_commit": lastest_commit}))
@@ -119,7 +125,7 @@ async def data_sync():
                 logger.error(e)
                 return False
             except Exception as e:
-                logger.error(e + "\n数据更新失败, 请重试")
+                logger.error(str(e) + "\n数据更新失败, 请重试")
                 return False
         else:
             logger.info("数据无需更新")
