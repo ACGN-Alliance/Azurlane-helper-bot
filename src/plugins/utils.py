@@ -1,4 +1,4 @@
-from nonebot.adapters.onebot.v11 import Message, PrivateMessageEvent, Bot, Event
+from nonebot.adapters.onebot.v11 import Message, PrivateMessageEvent, Bot, Event, GroupMessageEvent
 from typing import List
 
 async def send_forward_msg(
@@ -23,12 +23,11 @@ async def send_forward_msg(
         return {"type": "node", "data": {"name": name, "uin": uin, "content": msg}}
 
     messages = [to_node(msg) for msg in msgs]
-    is_private = isinstance(event, PrivateMessageEvent)
-    if(is_private):
+    if(isinstance(event, PrivateMessageEvent)):
         await bot.call_api(
             "send_private_forward_msg", user_id=event.user_id, messages=messages
         )
-    else:
+    elif(isinstance(event, GroupMessageEvent)):
         await bot.call_api(
             "send_group_forward_msg", group_id=event.group_id, messages=messages
         )
