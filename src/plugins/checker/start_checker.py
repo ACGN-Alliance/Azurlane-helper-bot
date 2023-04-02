@@ -6,9 +6,9 @@ from src.plugins.base.sync import data_sync
 driver = get_driver()
 @driver.on_bot_connect
 async def _(bot: Bot):
-    cfg = driver.config
-    if cfg.start_up_notify:
-        for user in cfg.superusers:
+    cfg = driver.config.dict()
+    if cfg.get("start_up_notify"):
+        for user in cfg.get("superusers"):
             await bot.send_private_msg(user_id=user, message="Bot已启动")
 
 @driver.on_startup

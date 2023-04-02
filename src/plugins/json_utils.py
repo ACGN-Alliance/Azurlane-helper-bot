@@ -21,3 +21,9 @@ async def read_and_remove_list(file_path, key, value):
     else:
         return False
     return True
+
+async def read_and_write_key(file_path, key, value):
+    raw_data = json.loads(open(file_path, "r", encoding="utf-8").read())
+    raw_data[key] = value
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write(json.dumps(raw_data))
