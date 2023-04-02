@@ -3,13 +3,14 @@ from nonebot.log import logger
 from nonebot import get_driver
 
 from src.plugins.exception import RemoteFileNotExistsException
+from src.plugins.config import config
 
 driver = get_driver()
 
 class GithubHook(object):
-    if(driver.config.download_source == "github"):
+    if(config.download_source == "github"):
         url_prefix = 'https://api.github.com/repos/MRSlouzk/nonebot-plugin-azurlane-assistant-data/'
-    elif(driver.config.download_source == "gitee"):
+    elif(config.download_source == "gitee"):
         url_prefix = 'https://gitee.com/mrslouzk/nonebot-plugin-azurlane-assistant-data/'
     else:
         url_prefix = 'https://api.github.com/repos/MRSlouzk/nonebot-plugin-azurlane-assistant-data/'
@@ -40,24 +41,25 @@ class GithubHook(object):
         for path in sync_list:
             url = self.url_prefix + 'contents/' + path
             try:
-                if(driver.config.PROXY): httpx.get(url, proxies=driver.config.PROXY)
+                if(config.PROXY): httpx.get(url, proxies=config.PROXY)
                 else: r = httpx.get(url)
-            except Exception as e:
+            except Exception:
                 raise Exception("Github API请求失败, 请检查代理设置")
             if(r.status_code == 404): raise RemoteFileNotExistsException(path)
             elif(r.status_code != 200): raise Exception("Github API出错")
+            logger.info(r.status_code)
             content = base64.b64decode(r.json()['content'])
             open(self.root_path + _path + path, "w", encoding="utf-8").write(content.decode("utf-8"))
 
 async def data_sync():
     is_need_inited = False
-    data_path_lst = ["data/azurlane/", "data/word_bank"]
+    data_path_lst = ["data/azurlane", "data/word_bank", "data/bili"]
     for path in data_path_lst:
         if not os.path.exists(path):
             os.makedirs(path)
             is_need_inited = True
 
-    data_file = ["data/group.json", "data/user.json", "data/group_cmd.json", "data/group_func.json", "data/bili/latest.json"]
+    data_file = ["data/group.json", "data/user.json", "data/group_cmd.json", "data/group_func.json", "data/config.json", "data/bili/latest.json"]
     for file in data_file:
         if not os.path.exists(file):
             with open(file, "w", encoding="utf-8") as f:
@@ -69,7 +71,7 @@ async def data_sync():
         with open("data/sync.json", "w", encoding="utf-8") as f:
             f.write(json.dumps(data))
     except Exception as e:
-        logger.error(e + "\n获取同步列表失败, 已终止数据同步")
+        logger.error(str(e) + "\n获取同步列表失败, 已终止数据同步")
         return False
 
     if is_need_inited:

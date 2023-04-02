@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class Config(BaseModel):
     start_up_notify: Optional[bool] = False
-    regular_update: Optional[bool] = False
+    # regular_update: Optional[bool] = False
     bili_sub_time : Optional[int] = 30
     download_source: Optional[str] = "github"
     PROXY: Optional[dict] = None

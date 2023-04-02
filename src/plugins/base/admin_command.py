@@ -3,12 +3,14 @@ from nonebot.params import CommandArg
 from nonebot.typing import T_State
 from nonebot.permission import SUPERUSER
 from nonebot.matcher import Matcher
+from nonebot.params import CommandArg
 
 from nonebot.adapters.onebot.v11 import MessageEvent, GroupMessageEvent, PrivateMessageEvent, Bot, Message
 
 from src.plugins.checker.start_checker import init
 from src.plugins.base.func_helper import *
 from src.plugins.utils import send_forward_msg
+from src.plugins.json_utils import read_and_write_key
 from src.plugins.base.sync import data_sync
 
 import json
@@ -23,8 +25,29 @@ async def _():
     else:
         await update_data.send("更新失败, 请检查后台输出")
 
+update_data_on = on_command("自动更新", permission=SUPERUSER)
+@update_data_on.handle()
+async def _(args: Message=CommandArg()):
+    arg = args.extract_plain_text().split()
+    if(len(arg) == 0):
+        await update_data_on.finish("使用方法: 更新设置 [开启/关闭]")
+    elif(arg[0] in ["开启", "on"]):
+        await read_and_write_key("data/config.json", "regular_update", True)
+
+        try:
+            from nonebot_plugin_apscheduler import scheduler
+            scheduler.add_job(data_sync, "interval", hour=24)
+        except ImportError:
+            await update_data_on.finish("未检测到nonebot_plugin_apscheduler, 请安装, 否则自动更新无法使用")
+        except Exception as e:
+            await update_data_on.finish(str(e))
+        await update_data_on.finish("自动更新已开启")
+    elif(arg[0] in ["关闭", "off"]):
+        await read_and_write_key("data/config.json", "regular_update", False)
+        await update_data_on.finish("自动更新已关闭")
+
 # 黑名单管理 #
-async def clear_blacklist() -> Message:
+async def clear_blacklist():
     group_data = json.load(open("data/group.json", "r", encoding="utf-8"))
     user_data = json.load(open("data/user.json", "r", encoding="utf-8"))
     for k in group_data.keys():
