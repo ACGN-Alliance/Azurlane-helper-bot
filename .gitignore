@@ -141,5 +141,6 @@ dmypy.json
 # other
 data/
 test/
+.VSCodeCounter/
 
 # End of https://www.toptal.com/developers/gitignore/api/python
