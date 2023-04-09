@@ -2,6 +2,7 @@ import json, random
 from typing import List
 
 from src.plugins.exception import DataMeteringException
+from src.plugins.json_utils import JsonUtils as ju
 
 async def build_simulator(
                         pool_type: str = "qx",
@@ -13,12 +14,16 @@ async def build_simulator(
     :param pool_type: 建造池类型:qx, zx, tx, xd
     """
     async def get_icon(name: str):
-        data = json.load(open("data/azurelane/ship.json", "r", encoding="utf-8"))
+        # data = json.load(open("data/azurelane/ship.json", "r", encoding="utf-8"))
+        data = await ju.get_val("data/azurlane/ship.json", [])
+        assert data != None
         for ship in data["data"]:
             if ship["name"] == name:
                 return ship["remote_icon_path"]
 
-    data = json.load(open("data/azurelane/data/pool.json", "r", encoding="utf-8"))
+    # data = json.load(open("data/azurelane/data/pool.json", "r", encoding="utf-8"))
+    data = await ju.get_val("data/azurlane/pool.json", [])
+    assert data != None
     result_lst = []
 
     if pool_type != "xd":
@@ -32,9 +37,11 @@ async def build_simulator(
                 if rnd <= 0:
                     res_prob = prob
                     break
+            ship = random.choice(ship_data[res_prob])
             result_lst.append({
-                "ship": ship_data[res_prob],
-                "probability": res_prob
+                "ship": ship,
+                "probability": res_prob,
+                "img_url": await get_icon(ship)
             })
     else:
         xd_lst = {
