@@ -15,19 +15,27 @@ async def event_handle(event: Event, bot: Bot, state: T_State) -> bool:
     """
     def user_check(user_id: int) -> bool:
         text = json.load(open("data/user.json", "r", encoding="utf-8"))
-        cmd = state["_prefix"]["command"][0]
+        try:
+            cmd = state["_prefix"]["command"][0]
+        except TypeError:
+            return False
         if text.get(cmd) is None:
             text.update({cmd: []})
             open("data/user.json", "w", encoding="utf-8").write(json.dumps(text))
             return True
         if user_id not in text[cmd]:
             return True
+        elif user_id not in text["global"]:
+            return True
         else:
             return False
 
     if isinstance(event, GroupMessageEvent):
         text = json.load(open("data/group.json", "r", encoding="utf-8"))
-        cmd = state["_prefix"]["command"][0]
+        try:
+            cmd = state["_prefix"]["command"][0]
+        except TypeError:
+            return False
         if text.get(cmd) is None:
             text.update({cmd: []})
             open("data/group.json", "w", encoding="utf-8").write(json.dumps(text))

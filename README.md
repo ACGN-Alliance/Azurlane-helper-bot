@@ -3,7 +3,7 @@
 碧蓝航线 QQ 群 Bot ，算是 [nonebot-plugin-azurlane-assistant](https://github.com/MRSlouzk/nonebot-plugin-azurlane-assistant) 的重置版，这次做的更好一点  
 
 > <b>该 Bot 正在开发中，请等待完善，最新开发进度请见 [dev分支](https://github.com/ACGN-Alliance/Azurlane-helper-bot/tree/dev)</b>
-> 更新日志正在写，暂时没有）））
+>   更新日志正在写，暂时没有）））
 
 > <b>该 Bot 功能尚诸多问题，请等待正式的 [Release](https://github.com/MRSlouzk/Azurlane-helper-bot/releases)，当然咱随时欢迎测试并提 [Issues](https://github.com/MRSlouzk/Azurlane-helper-bot/issues)</b> 
 

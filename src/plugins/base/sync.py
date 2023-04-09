@@ -4,6 +4,7 @@ from nonebot import get_driver
 
 from src.plugins.exception import RemoteFileNotExistsException
 from src.plugins.config import config
+from src.plugins.json_utils import JsonUtils as ju
 
 driver = get_driver()
 
@@ -51,7 +52,7 @@ class GithubHook(object):
             except Exception as e:
                 raise Exception(f"Github API请求失败, 错误原因:{e}")
             if(r is not None):
-                # logger.info(r.status_code)
+                logger.info("状态码："+str(r.status_code))
                 if(r.status_code == 404): raise RemoteFileNotExistsException(path)
                 elif(r.status_code != 200): raise Exception("Github API出错")
                 content = base64.b64decode(r.json()['content'])
@@ -65,11 +66,27 @@ async def data_sync():
             os.makedirs(path)
             is_need_inited = True
 
-    data_file = ["data/group.json", "data/user.json", "data/group_cmd.json", "data/group_func.json", "data/config.json", "data/bili/latest.json"]
+    data_file = [
+                "data/group.json",
+                "data/user.json",
+                "data/group_cmd.json", 
+                "data/group_func.json", 
+                "data/config.json", 
+                "data/bili/latest.json"
+                ]
+    init_val = [
+        {},
+        {
+            "global":[]
+        }
+    ]
+    await ju.init_many_jsons(data_file, init_val = init_val)
     for file in data_file:
         if not os.path.exists(file):
             with open(file, "w", encoding="utf-8") as f:
                 f.write(json.dumps({}))
+
+    # TODO 初始化加载所有功能数据
 
     g = GithubHook()
     try:

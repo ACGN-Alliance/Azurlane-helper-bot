@@ -6,6 +6,7 @@ from nonebot.adapters.onebot.v11 import (
 )
 from nonebot import on_command
 from nonebot.params import CommandArg
+from typing import Annotated
 
 from src.plugins.checker.rule_check import event_handle
 from src.plugins.utils import send_forward_msg
@@ -14,10 +15,9 @@ from .simulator import build_simulator
 
 bsm = on_command("模拟建造", rule=event_handle)
 @bsm.handle()
-async def build_simulator(bot: Bot, event: MessageEvent,arg: Message = CommandArg()):
+async def build_sim(bot: Bot, event: MessageEvent, arg: Annotated[Message, CommandArg()]):
     build_type = ["qx", "zx", "tx", "xd"]
-
-    args = arg.extract_plain_text().split()
+    args = arg.extract_plain_text().split(" ")
     if len(args) == 0:
         await bsm.finish("请输入建造池类型")
     elif len(args) == 1:
@@ -49,4 +49,4 @@ async def build_simulator(bot: Bot, event: MessageEvent,arg: Message = CommandAr
         except:
             await bsm.finish("获取舰船图标失败, 取消本次抽取")
         msg_lst.append(msg)
-    await send_forward_msg(bot, event, "建造模拟器", str(event.user_id), msg_lst)
+    await send_forward_msg(bot, event, "建造模拟器", str(bot.self_id), msg_lst)
