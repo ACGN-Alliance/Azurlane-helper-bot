@@ -5,7 +5,7 @@ import nonebot
 from nonebot.log import logger
 from nonebot.adapters.onebot.v11 import Bot
 
-from src.plugins.config import config
+from src.plugins.config import cfg
 
 # async def start_ala(bot: Bot):
 #     from src.plugins.base.sync import data_sync
@@ -39,7 +39,7 @@ try:
     #     if(cfg.get("regular_update") is None or cfg.get("regular_update")): #TODO 优化此处代码，config.json默认为True
     #         scheduler.add_job(start_ala, "interval", hour=24, minute=0)
 
-    bili_interval = config.bili_sub_time
+    bili_interval = cfg["bili"]["auto_push_time"]
     if(not isinstance(bili_interval, int)):
         pass
     else:

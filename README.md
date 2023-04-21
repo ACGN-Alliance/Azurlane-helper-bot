@@ -52,4 +52,6 @@
 
 #### 个人&组织
 - [lgc2333](https://github.com/lgc2333)：大佬的仓库提供了很多灵感
+- [一块蒙脱石](https://github.com/orgs/ACGN-Alliance/people/montmorill): 帮助编写了装备数据图的渲染代码
+- [果果](https://github.com/orgs/ACGN-Alliance/people/EndermiteX): 帮助编写了装备数据图的渲染代码
 - 待定

@@ -26,7 +26,11 @@ class RemoteFileNotExistsException(BaseException):
 
     def __str__(self):
         return f"{self.file_name}远程文件不存在, 请更新至最新的release"
-    
+
+class ConfigFileParseException(BaseException):
+    def __str__(self):
+        return f"配置文件解析失败, 请检查配置文件是否正确"
+
 class StatusCode(object):
     wbank = {
         "x00": "A",

@@ -4,6 +4,8 @@ from nonebot.exception import ActionFailed, WebSocketClosed
 from nonebot import get_driver
 from nonebot.log import logger
 
+from yaml.error import YAMLError
+
 @run_postprocessor
 async def _(bot: Bot, event: MessageEvent, e: Exception):
     if isinstance(e, ActionFailed):
@@ -11,6 +13,9 @@ async def _(bot: Bot, event: MessageEvent, e: Exception):
         logger.error(extra_msg + str(e))
     elif isinstance(e, WebSocketClosed):
         extra_msg = f"消息发送失败，WebSocket连接已关闭，请检查运行状态"
+        logger.error(extra_msg + str(e))
+    elif isinstance(e, YAMLError):
+        extra_msg = f"config.yaml格式错误，请检查"
         logger.error(extra_msg + str(e))
     else:
         extra_msg = ""

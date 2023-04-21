@@ -12,6 +12,7 @@ async def build_simulator(
     抽取建造池内容
     
     :param pool_type: 建造池类型:qx, zx, tx, xd
+    :param num: 抽取次数
     """
     async def get_icon(name: str):
         # data = json.load(open("data/azurelane/ship.json", "r", encoding="utf-8"))

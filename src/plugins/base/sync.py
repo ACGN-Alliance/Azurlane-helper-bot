@@ -3,19 +3,20 @@ from nonebot.log import logger
 from nonebot import get_driver
 
 from src.plugins.exception import RemoteFileNotExistsException
-from src.plugins.config import config
+from src.plugins.config import cfg
 from src.plugins.json_utils import JsonUtils as ju
 
 driver = get_driver()
 
 class GithubHook(object):
-    if(config.download_source == "github"):
+    if(cfg["base"]["download_source"] == "github"):
         # url_prefix = 'https://api.github.com/repos/MRSlouzk/nonebot-plugin-azurlane-assistant-data/'
         url_prefix = 'https://api.github.com/repositories/578098474/'
-    elif(config.download_source == "gitee"):
+    elif(cfg["base"]["download_source"] == "gitee"):
         url_prefix = 'https://gitee.com/mrslouzk/nonebot-plugin-azurlane-assistant-data/'
+    elif(cfg["base"]["download_source"] == "jsdelivr"):
+        url_prefix = 'https://cdn.jsdelivr.net/gh/ACGN-Alliance/nonebot-plugin-azurlane-assistant-data/'
     else:
-        # url_prefix = 'https://api.github.com/repos/MRSlouzk/nonebot-plugin-azurlane-assistant-data/'
         url_prefix = 'https://api.github.com/repositories/578098474/'
         
     root_path = "data/"
@@ -31,7 +32,7 @@ class GithubHook(object):
 
         """
         url = self.url_prefix + 'commits'
-        if(config.PROXY): r = httpx.get(url, proxies=config.PROXY)
+        if(cfg["base"]["network_proxy"]): r = httpx.get(url, proxies=cfg["base"]["network_proxy"])
         else: r = httpx.get(url)
         if(r.status_code == 403): raise Exception("检测更新时Github API请求过于频繁")
         # logger.error(f"检测更新时状态码:{r.status_code}")
@@ -47,7 +48,7 @@ class GithubHook(object):
             url = self.url_prefix + 'contents/' + path
             r = None
             try:
-                if(config.PROXY): r = httpx.get(url, proxies=config.PROXY)
+                if(cfg["base"]["network_proxy"]): r = httpx.get(url, proxies=cfg["base"]["network_proxy"])
                 else: r = httpx.get(url)
             except Exception as e:
                 raise Exception(f"Github API请求失败, 错误原因:{e}")

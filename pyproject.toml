@@ -1,9 +1,19 @@
 [project]
-name = "New"
-version = "0.1.0"
-description = "New"
-readme = "README.md"
-requires-python = ">=3.8, <4.0"
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "MRSlouzk", email = "MRSlouu@163.com"},
+]
+dependencies = [
+    "nb-cli>=1.1.2",
+    "nonebot2>=2.0.0rc4",
+    "setuptools>=67.7.1",
+    "pip>=23.1",
+    "bilibili-api-python>=15.4.0",
+]
+requires-python = ">=3.10"
+license = {text = "MIT"}
 
 [tool.nonebot]
 adapters = [
@@ -12,3 +22,5 @@ adapters = [
 plugins = ["nonebot_plugin_apscheduler"]
 plugin_dirs = ["src/plugins"]
 builtin_plugins = []
+
+[tool.pdm]
