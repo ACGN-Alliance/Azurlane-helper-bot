@@ -1,6 +1,7 @@
 from nonebot.typing import T_State
+from nonebot.permission import SUPERUSER
 from nonebot.adapters.onebot.v11 import (MessageEvent, 
-                                        GroupMessageEvent, 
+                                        GroupMessageEvent,
                                         PrivateMessageEvent, 
                                         GroupIncreaseNoticeEvent,
                                         NoticeEvent,
@@ -8,24 +9,28 @@ from nonebot.adapters.onebot.v11 import (MessageEvent,
                                         Bot)
 import json
 
+from src.plugins.config import black_list, admin
+
 async def event_handle(event: Event, bot: Bot, state: T_State) -> bool:
     """
     事件处理器
 
     """
     def user_check(user_id: int) -> bool:
-        text = json.load(open("data/user.json", "r", encoding="utf-8"))
+        if user_id in black_list:
+            return False
+        text_ = json.load(open("data/user.json", "r", encoding="utf-8"))
         try:
-            cmd = state["_prefix"]["command"][0]
+            cmd_ = state["_prefix"]["command"][0]
         except TypeError:
             return False
-        if text.get(cmd) is None:
-            text.update({cmd: []})
-            open("data/user.json", "w", encoding="utf-8").write(json.dumps(text))
+        if text_.get(cmd_) is None:
+            text_.update({cmd_: []})
+            open("data/user.json", "w", encoding="utf-8").write(json.dumps(text_))
             return True
-        if user_id not in text[cmd]:
+        if user_id not in text_[cmd_]:
             return True
-        elif user_id not in text["global"]:
+        elif user_id not in text_["global"]:
             return True
         else:
             return False

@@ -19,6 +19,8 @@
 - :smile: 基础关键词回复
 - :dvd: Gitee 国内镜像源数据
 
+## 文档
+[AZbot-Docs](https://acgn-alliance.github.io/AZbot-docs/#/)
 ## TODO
 - [ ] 碧蓝航线官方B站动态推送(预计使用 [bilibili-api](https://github.com/Nemo2011/bilibili-api) + PIL 实现)  
 - [x] 为建造模拟器建造结果添加舰船图标
@@ -41,19 +43,16 @@
 ## 鸣谢
 #### 仓库
 - [Nonebot2](https://github.com/nonebot/nonebot2)：提供机器人框架
-- [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)：提供 QQ 消息端
 - [nonebot-plugin-bawiki](https://github.com/lgc2333/nonebot-plugin-bawiki/)：提供代码灵感
 - [blhx-wiki](https://github.com/DK09/blhx-wiki)：提供装备图等资源
-- [blhx-wiki-mirai-plugin](https://gitee.com/arisaka-iris/blhx-wiki-mirai-plugin)：提供代码灵感
 - [XDbot2](https://github.com/This-is-XiaoDeng/XDbot2)：提供代码灵感
 - [AzurLaneTools](https://github.com/Pelom777/AzurLaneTools)：提供了大量游戏资源文件
+- [docsify](https://github.com/docsifyjs/docsify)：提供文档生成框架
 
 #### 网站
 - [碧蓝航线wiki](https://wiki.biligame.com/blhx/%E9%A6%96%E9%A1%B5)：本仓库全部数据均来源于此
-- [postimg.cc](https://postimg.cc/)：提供图床支持
 
 #### 个人&组织
 - [lgc2333](https://github.com/lgc2333)：大佬的仓库提供了很多灵感
 - [一块蒙脱石](https://github.com/orgs/ACGN-Alliance/people/montmorill): 帮助编写了装备数据图的渲染代码
 - [果果](https://github.com/orgs/ACGN-Alliance/people/EndermiteX): 帮助编写了装备数据图的渲染代码
-- 待定
