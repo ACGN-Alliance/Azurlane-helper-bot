@@ -13,7 +13,7 @@ from src.plugins.utils import send_forward_msg
 from src.plugins.json_utils import JsonUtils as ju
 from src.plugins.base.sync import data_sync
 
-from typing import List
+from typing import List, Annotated
 import json
 
 # 数据操作部分 #
@@ -28,7 +28,7 @@ async def _():
 
 update_data_on = on_command("自动更新", permission=SUPERUSER)
 @update_data_on.handle()
-async def _(args: Message=CommandArg()):
+async def _(args: Annotated[Message, CommandArg()]):
     arg = args.extract_plain_text().split()
     if(len(arg) == 0):
         await update_data_on.finish("使用方法: 更新设置 [开启/关闭]")

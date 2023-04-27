@@ -1,5 +1,5 @@
-from .bili_article import *
 from nonebot import on_command
+from typing import Annotated
 
 from nonebot.adapters.onebot.v11 import (
     Bot,
@@ -12,10 +12,11 @@ from nonebot.params import CommandArg
 
 from src.plugins.checker.rule_check import bili_handle
 from src.plugins.json_utils import read_and_add_list, read_and_remove_list
+from .bili_article import *
 
 bili_sub = on_command("bili订阅", rule=bili_handle, permission=GROUP_ADMIN | GROUP_OWNER)
 @bili_sub.handle()
-async def _(event: GroupMessageEvent, arg: Message = CommandArg()):
+async def _(event: GroupMessageEvent, arg: Annotated[Message, CommandArg()]):
     args = arg.extract_plain_text().split()
     if(len(args) == 0): await bili_sub.finish("用法: bili订阅 开启|关闭")
     if(args[0] == "开启"):

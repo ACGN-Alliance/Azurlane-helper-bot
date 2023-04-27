@@ -142,5 +142,6 @@ dmypy.json
 data/
 test/
 .VSCodeCounter/
+gocq/
 
 # End of https://www.toptal.com/developers/gitignore/api/python.pdm-python

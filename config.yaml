@@ -1,5 +1,6 @@
-# 此文件为Azurlane-helper-bot的配置文件, 仓库链接文件： ...
+# 此文件为Azurlane-helper-bot的配置文件, 仓库链接文件： https://github.com/ACGN-Alliance/Azurlane-helper-bot/blob/master/config.yaml
 # 请不要随意乱改config.yaml文件，以免出现错误
+# 出现问题请从仓库链接文件中下载新的config.yaml文件替换原有文件
 
 user:
   super_admin:
@@ -13,14 +14,15 @@ user:
     - 987654321
 
 base:
-  network_proxy: ""             # 代理地址，如需使用代理请填写代理地址，否则请留空(exp: http://127.0.0.1:7890)
-  startup_notify: false         # 是否在启动时发送通知
-  startup_update: true          # 是否在启动时更新数据(建议开启)
-  download_source: "github"     # 下载数据源，可选项：github, gitee, jsdelivr(国内推荐)
+  network_proxy: ""                                   # 代理地址，如需使用代理请填写代理地址，否则请留空(exp: http://127.0.0.1:7890)
+  startup_notify: false                               # 是否在启动时发送通知
+  startup_update: true                                # 是否在启动时更新数据(建议开启)
+  download_source: "github"                           # 下载数据源，可选项：github, gitee, jsdelivr(国内推荐)
 
 bili:
-  auto_push_time: 30            # 自动推送间隔时间，单位：分钟
+  auto_push_time: 30                                  # 自动推送间隔时间，单位：分钟
 
 func:
-  equip_render_mode: "cache"    # 装备渲染模式，可选：cache, real_time。cache为缓存模式(渲染过一次后会保存在本地)，real_time为实时渲染模式
-  build_output_mode: "forward"  # 模拟建造输出消息模式，可选：image(试验性功能), forward。image为图片模式，text为合并转发模式
+  equip_render_mode: "cache"                          # 装备渲染模式，可选：cache, real_time。cache为缓存模式(渲染过一次后会保存在本地)，real_time为实时渲染模式
+  equip_tmp_dir: ""                                   # 装备渲染临时文件夹，留空则为默认路径(格式："/data/...", 根目录为nb run运行目录)
+  build_output_mode: "forward"                        # 模拟建造输出消息模式，可选：image(试验性功能), forward。image为图片模式，text为合并转发模式
