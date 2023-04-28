@@ -1,3 +1,5 @@
+import os.path
+
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot import get_driver
 from nonebot.log import logger
@@ -20,6 +22,8 @@ async def init():
         await data_sync()
     else:
         logger.info("config.yaml中\"startup_update\"选项已关闭, 将不会更新数据")
+        if not os.path.exists("data"):
+            logger.warning("data文件夹不存在，使用时会报错，请将\"startup_update\"选项打开后重新启动")
 
     for user in cfg["user"]["super_admin"]:
         get_driver().config.superusers.add(user)

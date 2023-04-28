@@ -1,25 +1,54 @@
-# 此文件为Azurlane-helper-bot的配置文件, 仓库链接文件： https://github.com/ACGN-Alliance/Azurlane-helper-bot/blob/master/config.yaml
+# 此文件为Azurlane-helper-bot的配置文件
+# 文件链接： https://github.com/ACGN-Alliance/Azurlane-helper-bot/blob/master/config.yaml
 # 请不要随意乱改config.yaml文件，以免出现错误
-# 出现问题请从仓库链接文件中下载新的config.yaml文件替换原有文件
+# 出现问题请从仓库文件中下载新的config.yaml文件替换原有文件
 
 user:
+  # 超级管理员QQ号
+  # 可填写多个，填0则没有
   super_admin:
-    - 123456789                                       # 超级管理员QQ号，可填写多个，填0则没有
+    - 3237231778
     - 987654321
+  # 黑名单QQ号
+  # 可填写多个，填0则没有
   black_list:
-    - 123456789                                       #T 黑名单QQ号，可填写多个，填0则没有
+    - 123456789
     - 987654321
 
 base:
-  network_proxy: ""                                   # 代理地址，如需使用代理请填写代理地址，否则请留空(exp: http://127.0.0.1:7890)
-  startup_notify: false                               # 是否在启动时发送通知
-  startup_update: true                                # 是否在启动时更新数据(建议开启)
-  download_source: "github"                           # 下载数据源，可选项：github, gitee, jsdelivr(国内推荐)
+  # 代理地址
+  # 如需使用代理请填写代理地址，否则请留空
+  # exp: http://127.0.0.1:7890
+  network_proxy: ""
+  # 是否在启动时私聊发送通知
+  startup_notify: false
+  # 是否在启动时更新数据
+  # false仅供调试使用，正常使用请打开！
+  # ！！！注意：第一次启动若未开启运行时会报错！！！
+  startup_update: false
+  # 下载数据源
+  # 可选项：github, gitee, jsdelivr(国内推荐)
+  # 注意：因为一些技术原因，即使选择了gitee和jsdelivr，部分数据也会从github下载
+  # 所以请尽量使用代理，否则可能会出现下载失败的情况
+  download_source: "github"
 
 bili:
-  auto_push_time: 30                                  # 自动推送间隔时间，单位：分钟
+  # 动态自动推送间隔时间
+  # 单位：分钟
+  auto_push_time: 30
 
 func:
-  equip_render_mode: "cache"                          # 装备渲染模式，可选：cache, real_time。cache为缓存模式(渲染过一次后会保存在本地)，real_time为实时渲染模式
-  equip_tmp_dir: ""                                   # 装备渲染临时文件夹，留空则为默认路径(格式："/data/...", 根目录为nb run运行目录)
-  build_output_mode: "forward"                        # 模拟建造输出消息模式，可选：image(试验性功能), forward。image为图片模式，text为合并转发模式
+  # 装备渲染模式
+  # 可选：cache, real_time。
+  # cache为缓存模式(渲染过一次后图片会保存在本地)，real_time为实时渲染模式
+  # cache优点：发送速度快，缺点：占用磁盘空间大
+  # real_time优点：不占用磁盘空间，缺点：发送速度慢、耗费性能
+  equip_render_mode: "cache"
+  # 装备渲染临时文件夹
+  # 留空则为默认路径(格式："/data/...", 根目录为nb run运行目录)
+  # 仅在装备渲染模式为cache时有效
+  equip_tmp_dir: ""
+  # 模拟建造输出消息模式
+  # 可选：image(暂不可用，将在未来加入), forward。
+  # image为图片模式，forward为合并转发模式
+  build_output_mode: "forward"

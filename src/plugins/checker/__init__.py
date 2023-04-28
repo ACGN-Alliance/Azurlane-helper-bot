@@ -1,10 +1,11 @@
+from src.plugins.config import cfg
+
 from .rule_check import *
 from .start_checker import *
 
 import nonebot
 from nonebot.log import logger
 
-from src.plugins.config import cfg
 
 from nonebot import require
 require("nonebot_plugin_apscheduler")

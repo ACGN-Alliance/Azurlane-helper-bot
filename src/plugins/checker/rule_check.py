@@ -9,7 +9,7 @@ from nonebot.adapters.onebot.v11 import (MessageEvent,
                                         Bot)
 import json
 
-from src.plugins.config import black_list, admin
+from src.plugins.config import black_list
 
 async def event_handle(event: Event, bot: Bot, state: T_State) -> bool:
     """
