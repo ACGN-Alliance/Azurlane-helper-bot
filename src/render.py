@@ -36,7 +36,7 @@ T_Border: TypeAlias = (             # allowed border types
     tuple[int, int] |               # top and bottom, right and left
     tuple[int, int, int] |          # top, right and left, bottom
     tuple[int, int, int, int] |     # top, right, bottom, left
-    "Border"                        # a `Border`
+    type["Border"]                  # a `Border`
 )
 T_Image: TypeAlias = T_Path | Image.Image | bytes   # allowed image types
 
