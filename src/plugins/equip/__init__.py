@@ -1,6 +1,7 @@
 import json
 import os
 from typing import Annotated
+from io import BytesIO
 
 from nonebot import on_command
 from nonebot.adapters.onebot.v11 import (
@@ -10,6 +11,7 @@ from nonebot.params import CommandArg
 
 from src.plugins.checker.rule_check import event_handle
 from src.plugins.config import cfg
+from .render import EquipAttr
 
 __usage__ = """
 装备查询功能可以查询某个装备的详细信息
@@ -23,7 +25,14 @@ if not cfg["func"]["equip_tmp_dir"]: tmp_dir = data_dir + "tmp/"
 else: tmp_dir = cfg["func"]["equip_tmp_dir"]
 if not os.path.exists(tmp_dir): os.makedirs(tmp_dir)
 
-equip_info = on_command("装备查询", aliases={"eqif"}, rule=event_handle)
+def render_img(name: str):
+    equip_data = json.load(open(data_dir + name + ".json", "r", encoding="utf-8"))
+    io = BytesIO()
+    EquipAttr(equip_data).im.save(io)
+    img = io.read()
+    return img
+
+equip_info = on_command(cmd="装备查询", aliases={"eqif"}, rule=event_handle)
 @equip_info.handle()
 async def _(arg: Annotated[Message, CommandArg()]):
     args = arg.extract_plain_text().split("")
@@ -34,17 +43,14 @@ async def _(arg: Annotated[Message, CommandArg()]):
         if not all_equip.get(args[0]):
             await equip_info.finish("未查询到该装备(注意: 目前不支持缩写查询)")  # TODO 支持缩写查询
         if cfg["func"]["equip_render_mode"] == "real_time":
-            equip_data = json.load(open(data_dir + args[0] + ".json", "r", encoding="utf-8"))
-            img: bytes = ...   # TODO 装备信息渲染
-            msg = MessageSegment.image(img)
+            msg = MessageSegment.image(render_img(str(arg[0])))
         elif cfg["func"]["equip_render_mode"] == "cache":
             local_file_lst = os.listdir(tmp_dir)
             if args[0] + ".png" in local_file_lst:
                 parent_path = os.path.abspath(os.path.join(tmp_dir, ".."))
                 msg = MessageSegment.image(f"file:///{parent_path + tmp_dir + args[0]}.png")
             else:
-                equip_data = json.load(open(data_dir + args[0] + ".json", "r", encoding="utf-8"))
-                img: bytes = ...
+                img = render_img(str(arg[0]))
                 msg = MessageSegment.image(img)
                 open(tmp_dir + args[0] + ".png", "wb").write(img)
         else:
