@@ -1,4 +1,7 @@
 from src.render import Frame, Text, Border
+from src.plugins.config import cfg
+
+IMAGE_PATH = cfg["func"]["image_path"]
 
 suit_types = [
     "驱逐",
@@ -84,15 +87,15 @@ class EquipAttr(Frame):
             background=(67, 67, 67)
         ))
         # rarity
-        self.append(f"image/icon/equip/level_{data['rarity'] + 1}.png")
+        self.append(f"{IMAGE_PATH}/icon/equip/level_{data['rarity'] + 1}.png")
         # icon
         self.append(
-            f"image/equip/{data['name'].replace('/', '_')}.png",
+            f"{IMAGE_PATH}/equip/{data['name'].replace('/', '_')}.png",
             ((self.width - 128) // 2, self.height - 175), (128, 128)
         )
         # level
         self.append(
-            f"image/icon/equip/{data['level']}.png",
+            f"{IMAGE_PATH}/icon/equip/{data['level']}.png",
             (512, self.height - 196), (32, 45)
         )
         # type
@@ -118,11 +121,11 @@ class EquipAttr(Frame):
             padding=Border(5),
             margin=Border(10, top=0),
             background=(52, 52, 52)
-        ).append("image/icon/equip/use.png")
+        ).append(F"{IMAGE_PATH}/icon/equip/use.png")
         for suit_type in data["suit_type"]:
             n = suit_types.index(suit_type)
             use.append(
-                f"image/icon/equip/use_{n+1}.png",
+                f"{IMAGE_PATH}/icon/equip/use_{n+1}.png",
                 ((n % 5)*104 + 32, (n // 5)*48 + 14)
             )
         self.append(use)

@@ -41,9 +41,9 @@ func:
   # 装备渲染模式
   # 可选：cache, real_time。
   # cache为缓存模式(渲染过一次后图片会保存在本地)，real_time为实时渲染模式
-  # cache优点：发送速度快，缺点：占用磁盘空间大
+  # cache优点：发送速度快，缺点：占用磁盘空间大（可达数十GB）
   # real_time优点：不占用磁盘空间，缺点：发送速度慢、耗费性能
-  equip_render_mode: "cache"
+  equip_render_mode: "real_time"
   # 装备渲染临时文件夹
   # 留空则为默认路径(格式："/data/...", 根目录为nb run运行目录)
   # 仅在装备渲染模式为cache时有效
@@ -52,3 +52,6 @@ func:
   # 可选：image(暂不可用，将在未来加入), forward。
   # image为图片模式，forward为合并转发模式
   build_output_mode: "forward"
+  # 图片源地址
+  # 若为本地文件，直接写地址，无需加file:///
+  image_path: "https://raw.githubusercontent.com/DK09/blhx-wiki/master/image"

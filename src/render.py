@@ -18,12 +18,14 @@ __author__ = "一块蒙脱石"
 
 
 from typing import TypeAlias, Literal, Union, Optional, Self, overload
+from io import BytesIO
 import random
 
+import requests
 from PIL import Image, ImageDraw, ImageFont
 
 
-Path: TypeAlias = str | bytes   # a path or path-like
+T_Path: TypeAlias = str | bytes   # a path or path-like
 Color: TypeAlias = (            # see: https://drafts.CSSwg.org/CSS-color-4/
     str |                       # named-colors, see: CSS-color-4/#named-colors
     tuple[int, int, int] |      # r(ed), g(reen), b(lue)
@@ -36,7 +38,7 @@ T_Border: TypeAlias = (             # allowed border types
     tuple[int, int, int, int] |     # top, right, bottom, left
     "Border"                        # a `Border`
 )
-T_Image: TypeAlias = Path | Image.Image     # allowed image types
+T_Image: TypeAlias = T_Path | Image.Image | bytes   # allowed image types
 
 
 FONT = "font.ttf"                   # default font file
@@ -294,7 +296,18 @@ def noise(im: T_Image, noise: int = 5) -> Image.Image:
 def image(im: T_Image) -> Image.Image:
     if isinstance(im, Image.Image):
         return im
-    return Image.open(im)
+    try:
+        return Image.open(im)
+    except:
+        io = BytesIO()
+        if isinstance(im, str):
+            im = im.encode()
+        io.write(
+            requests.get(im).content
+            if im.startswith(b"http")
+            else im
+        )
+        return Image.open(io)
 
 
 def border(padding: T_Border) -> Border:
