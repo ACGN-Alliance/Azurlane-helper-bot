@@ -25,48 +25,6 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 
 
-T_Path: TypeAlias = str | bytes   # a path or path-like
-Color: TypeAlias = (            # see: https://drafts.CSSwg.org/CSS-color-4/
-    str |                       # named-colors, see: CSS-color-4/#named-colors
-    tuple[int, int, int] |      # r(ed), g(reen), b(lue)
-    tuple[int, int, int, int]   # r(ed), g(reen), b(lue), a(lpha)
-)
-T_Border: TypeAlias = (             # allowed border types
-    int |                           # all borders
-    tuple[int, int] |               # top and bottom, right and left
-    tuple[int, int, int] |          # top, right and left, bottom
-    tuple[int, int, int, int] |     # top, right, bottom, left
-    type["Border"]                  # a `Border`
-)
-T_Image: TypeAlias = T_Path | Image.Image | bytes   # allowed image types
-
-
-FONT = "font.ttf"                   # default font file
-TRANSPARENT: Color = (0, 0, 0, 0)   # transparent
-
-
-class Ink:
-    def __init__(
-        self,
-        func: str,
-        args: tuple
-    ) -> None:
-        self.func = func
-        self.args = args
-
-
-class Child:
-    def __init__(
-        self,
-        frame: "Frame",
-        xy: Optional[tuple[int, int]] = None,
-        size: Optional[tuple[int, int]] = None
-    ) -> None:
-        self.frame = frame
-        self.xy = xy
-        self.size = size
-
-
 class Border:
     @overload
     def __init__(
@@ -129,6 +87,26 @@ class Border:
         self.height = self.top + self.bottom
         self.width = self.left + self.right
         self.xy = self.left, self.top
+
+
+T_Path: TypeAlias = str | bytes   # a path or path-like
+Color: TypeAlias = (            # see: https://drafts.CSSwg.org/CSS-color-4/
+    str |                       # named-colors, see: CSS-color-4/#named-colors
+    tuple[int, int, int] |      # r(ed), g(reen), b(lue)
+    tuple[int, int, int, int]   # r(ed), g(reen), b(lue), a(lpha)
+)
+T_Border: TypeAlias = (             # allowed border types
+    int |                           # all borders
+    tuple[int, int] |               # top and bottom, right and left
+    tuple[int, int, int] |          # top, right and left, bottom
+    tuple[int, int, int, int] |     # top, right, bottom, left
+    Border                          # a `Border`
+)
+T_Image: TypeAlias = T_Path | Image.Image | bytes   # allowed image types
+
+
+FONT = "font.ttf"                   # default font file
+TRANSPARENT: Color = (0, 0, 0, 0)   # transparent
 
 
 class Frame:
@@ -282,6 +260,28 @@ class Text(Frame):
             )(len(self.align))
             draw.text((x, y), line, self.color, self.font)
         return im
+
+
+class Ink:
+    def __init__(
+        self,
+        func: str,
+        args: tuple
+    ) -> None:
+        self.func = func
+        self.args = args
+
+
+class Child:
+    def __init__(
+        self,
+        frame: "Frame",
+        xy: Optional[tuple[int, int]] = None,
+        size: Optional[tuple[int, int]] = None
+    ) -> None:
+        self.frame = frame
+        self.xy = xy
+        self.size = size
 
 
 def noise(im: T_Image, noise: int = 5) -> Image.Image:
