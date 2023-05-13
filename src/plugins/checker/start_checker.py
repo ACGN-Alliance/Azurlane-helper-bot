@@ -1,4 +1,4 @@
-import os.path
+import os.path, sys
 
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot import get_driver
@@ -17,6 +17,13 @@ async def _(bot: Bot):
 @driver.on_startup
 async def init():
     # TODO config.yaml解析
+    # 文件检查
+    if not (cfg.get("user") or cfg.get("user").get("super_admin")):
+        logger.error("未找到正确配置，请初始化config")
+        sys.exit(0)
+    elif len(cfg["user"]["super_admin"]) == 0:
+        logger.error("未配置必须项 super_admin ，请配置完成后重新启动")
+        sys.exit(0)
 
     if cfg["base"]["startup_update"]:
         await data_sync()

@@ -6,6 +6,7 @@
 user:
   # 超级管理员QQ号
   # 可填写多个，填0则没有
+  # 最上面一个会接收到好友申请消息，其他的无法接收
   super_admin:
     - 3237231778
     - 987654321
@@ -14,6 +15,10 @@ user:
   black_list:
     - 123456789
     - 987654321
+  # 是否接收入群申请
+  can_invited_to_group: false
+  # 是否接收好友申请
+  can_invited_to_friend: false
 
 base:
   # 代理地址
@@ -28,7 +33,7 @@ base:
   startup_update: false
   # 下载数据源
   # 可选项：github, gitee, jsdelivr(国内推荐)
-  # 注意：因为一些技术原因，即使选择了gitee和jsdelivr，部分数据也会从github下载
+  # 注意：因为一些技术原因，即使选择了 gitee 和 jsdelivr ，部分数据也会从 github 下载
   # 所以请尽量使用代理，否则可能会出现下载失败的情况
   download_source: "github"
 

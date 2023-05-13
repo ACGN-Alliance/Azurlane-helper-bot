@@ -1,6 +1,6 @@
 class BotRiskManageException(BaseException):
     def __str__(self):
-        return f"机器人被风控, 请联系管理员解决{StatusCode('x05')}"
+        return f"机器人被风控, 请联系管理员解决"
     
 class CanNotSyncException(BaseException):
     def __str__(self):
@@ -11,7 +11,7 @@ class FunctionNotImplementedException(BaseException):
         self.func_name = func_name
 
     def __str__(self):
-        return f"{self.func_name}功能尚未实现{StatusCode('x04')}"
+        return f"{self.func_name}功能尚未实现"
     
 class DataMeteringException(BaseException):
     def __init__(self, data_name: str):
@@ -30,22 +30,3 @@ class RemoteFileNotExistsException(BaseException):
 class ConfigFileParseException(BaseException):
     def __str__(self):
         return f"配置文件解析失败, 请检查配置文件是否正确"
-
-class StatusCode(object):
-    wbank = {
-        "x00": "A",
-        "x01": "成功",
-        "x02": "网络访问错误",
-        "x03": "路径查找错误",
-        "x04": "功能不存在",
-        "x05": "消息发送错误",
-        "x06": "资源无法读取",
-        "x50": "未知错误",
-        "x91": "调试性功能"
-    }
-
-    def __init__(self, code: str):
-        self.code = code
-
-    def __str__(self):
-        return f"\n\n状态码: {self.code}, 提示: {self.wbank[self.code]}"
