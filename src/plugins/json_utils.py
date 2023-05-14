@@ -2,7 +2,7 @@ import json
 from typing import List, Any
 from pathlib import Path
 
-class JsonUtils(object):
+class JsonUtils:
     path_prefix = ""
     enable_ascii = False
     indent = 4
@@ -26,13 +26,16 @@ class JsonUtils(object):
     async def get_val(
                             cls,
                             file_path: str | Path,
-                            key_path: List[str|int] | str | int
+                            key_path: List[str | int] | str | int,
+                            *args,
+                            filter: List[str | int] = []
                             ) -> Any | None:
         """
         读取Json文件并获取值
 
         :param file_path: 文件路径
         :param key_path: 键路径
+        :param filter: 过滤器 # TODO 待添加功能
         :return: 值
         """
         if(isinstance(key_path, (str, int))):

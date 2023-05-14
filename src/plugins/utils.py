@@ -3,6 +3,7 @@ from nonebot.adapters.onebot.v11 import (Message,
                                          Bot,
                                          Event,
                                          GroupMessageEvent,
+                                         MessageEvent,
                                          GROUP_ADMIN,
                                          GROUP_OWNER)
 from nonebot.exception import ActionFailed
@@ -44,3 +45,9 @@ async def send_forward_msg(
             await bot.send_msg(message_type=event.message_type, user_id=event.user_id, message="合并转发消息发送失败")
         elif isinstance(event, GroupMessageEvent):
             await bot.send_msg(message_type=event.message_type, group_id=event.group_id, message="合并转发消息发送失败")
+
+async def is_in_group(event: MessageEvent):
+    return isinstance(event, GroupMessageEvent)
+
+async def is_in_private(event: MessageEvent):
+    return isinstance(event, PrivateMessageEvent)
