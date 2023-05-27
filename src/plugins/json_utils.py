@@ -1,4 +1,4 @@
-import json
+import json, os
 from typing import List, Any
 from pathlib import Path
 
@@ -38,6 +38,9 @@ class JsonUtils:
         :param filter: 过滤器 # TODO 待添加功能
         :return: 值
         """
+        if not os.path.exists(file_path):
+            await cls.init_json(file_path)
+
         if(isinstance(key_path, (str, int))):
             key_path = [key_path]
 
@@ -95,6 +98,26 @@ class JsonUtils:
         return vals
 
     @classmethod
+    async def update_whole_file(
+                                cls,
+                                file_path: str | Path,
+                                value: Any
+                                ) -> bool | Exception | None:
+        """
+        更新Json文件
+
+        :param file_path: 文件路径
+        :param value: 值
+        :return: 是否成功
+        """
+        if not os.path.exists(file_path):
+            await cls.init_json(file_path)
+
+        with open(cls.path_prefix + str(file_path), "w", encoding=cls.encode) as f:
+            f.write(json.dumps(value, ensure_ascii=cls.enable_ascii, indent=cls.indent))
+        return True
+
+    @classmethod
     async def update_val(
                         cls,
                         file_path: str | Path,
@@ -109,6 +132,9 @@ class JsonUtils:
         :param value: 值
         :return: 是否成功
         """
+        if not os.path.exists(file_path):
+            await cls.init_json(file_path)
+
         if(isinstance(key_path, (str, int))):
             key_path = [key_path]
         
@@ -184,6 +210,9 @@ class JsonUtils:
         :param value: 值
         :return: 是否成功
         """
+        if not os.path.exists(file_path):
+            await cls.init_json(file_path)
+
         if(isinstance(key_path, (str, int))):
             key_path = [key_path]
         
@@ -246,6 +275,9 @@ class JsonUtils:
         :param key_path: 键路径
         :return: 是否成功
         """
+        if not os.path.exists(file_path):
+            await cls.init_json(file_path)
+
         if(isinstance(key_path, (str, int))):
             key_path = [key_path]
         
@@ -290,6 +322,8 @@ class JsonUtils:
                     *args,
                     init_val: dict = {},
     ):
+        if not os.path.exists(file_path):
+            os.makedirs(file_path)
         raw = init_val
         json.dump(raw, open(cls.path_prefix + str(file_path), "w", encoding=cls.encode), ensure_ascii=cls.enable_ascii, indent=cls.indent)
 

@@ -12,6 +12,7 @@
 ## 功能
 - :ship: 模拟建造(支持轻型重型特型以及限定池)
 - :airplane: 装备参数查询
+- :green_circle: 服务器状态查询
 
 ## 实用功能
 - :black_large_square: 各功能的黑名单
@@ -30,6 +31,7 @@
 - [ ] 上架 Nonebot 商店
 - [ ] 好看的功能菜单
 - [ ] 使用文档(可能会搞个 Github Page )
+- [ ] 动态修改配置
 
 ## 关于授权
 本项目当中使用的 [blhx-wiki](https://github.com/DK09/blhx-wiki) 内容已获得原作者授权(授权图如下，加载不出请开魔法)

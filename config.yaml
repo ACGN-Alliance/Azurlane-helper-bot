@@ -28,8 +28,8 @@ base:
   # 是否在启动时私聊发送通知
   startup_notify: false
   # 是否在启动时更新数据
-  # false仅供调试使用，正常使用请打开！
-  # ！！！注意：第一次启动若未开启运行时会报错！！！
+  # false仅供调试使用，正常使用请设置为true！
+  # ！！！注意：第一次启动若未设置为false,则运行时会报错！！！
   startup_update: false
   # 下载数据源
   # 可选项：github, gitee, jsdelivr(国内推荐)
@@ -46,13 +46,17 @@ func:
   # 装备渲染模式
   # 可选：cache, real_time。
   # cache为缓存模式(渲染过一次后图片会保存在本地)，real_time为实时渲染模式
-  # cache优点：发送速度快，缺点：占用磁盘空间大（可达数十GB）
+  # cache优点：发送速度快，缺点：占用磁盘空间大（可达数GB）
   # real_time优点：不占用磁盘空间，缺点：发送速度慢、耗费性能
   equip_render_mode: "real_time"
   # 装备渲染临时文件夹
   # 留空则为默认路径(格式："/data/...", 根目录为nb run运行目录)
   # 仅在装备渲染模式为cache时有效
   equip_tmp_dir: ""
+  # 装备渲染缓存自动清理时间
+  # 单位: 小时
+  # -1为关闭自动清理
+  equip_render_auto_clean: -1
   # 模拟建造输出消息模式
   # 可选：image(暂不可用，将在未来加入), forward。
   # image为图片模式，forward为合并转发模式
@@ -60,3 +64,6 @@ func:
   # 图片源地址
   # 若为本地文件，直接写地址，无需加file:///
   image_path: "https://raw.githubusercontent.com/DK09/blhx-wiki/master/image"
+  # 服务器状态监测刷新间隔
+  # 单位：秒
+  server_status_monitor_refresh_time: 60
