@@ -46,25 +46,35 @@ async def get_server_state(name: str):
         2: "爆满",
         3: "已满",
     }
-    is_update = False
+    is_updated = False
 
-    msg = Message(f"{name}服务器状态：\n")
     ip = get_server_ip(name)
     resp = get(ip)
     if resp.status_code != 200:
         return Message("服务器状态推送出错")
 
+    msg = Message(f"{name}服务器状态：\n")
     ori_data = await ju.get_val(data_dir, [])
+    if not ori_data:
+        write_data = ori_data
+        for server in resp.json():
+            write_data[name] = {}
+            write_data[name].update({server["name"]: server["state"]})
+        await ju.update_whole_file(data_dir, write_data)
 
     for server in resp.json():
+        server_name = server["name"]
         status = server["state"]
-        if ori_data[server["name"]]["state"] == status:
-            continue
+        if ori_data.get(name):
+            if ori_data[name][server_name] == status:
+                continue
 
-        is_update = True
+        is_updated = True
+        ori_data[name].update({server["name"]: server["state"]})
         msg += Message(f"{server['name']}：{all_status[server['state']]}, 状态码：{server['state']}\n")
-    if is_update:
-        await ju.update_whole_file(data_dir, resp.json())
+
+    if is_updated:
+        await ju.update_whole_file(data_dir, ori_data)
         return msg + Message(f"\n更新时间：{time()}")
     else:
         return None

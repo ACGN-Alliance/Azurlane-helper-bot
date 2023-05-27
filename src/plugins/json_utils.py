@@ -40,6 +40,7 @@ class JsonUtils:
         """
         if not os.path.exists(file_path):
             await cls.init_json(file_path)
+            return None
 
         if(isinstance(key_path, (str, int))):
             key_path = [key_path]
