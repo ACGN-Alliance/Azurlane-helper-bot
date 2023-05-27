@@ -9,7 +9,7 @@ from nonebot.adapters.onebot.v11 import (
 from nonebot import on_command, on_keyword, on_notice, on_message
 
 from src.plugins.checker.rule_check import event_handle, chat_handle, notice_handle
-from src.plugins.base.func_helper import __version__
+__version__ = "0.0.1-dev"
 
 import re, json
 

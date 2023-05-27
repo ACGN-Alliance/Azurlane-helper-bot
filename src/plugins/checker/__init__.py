@@ -48,12 +48,12 @@ else:
             else:
                 logger.info(f"[自动清理]未找到{tmp_dir}, 无需清理")
 
-auto_check = cfg["func"]["server_status_auto_check"]
+auto_check = cfg["func"]["server_status_monitor_refresh_time"]
 if(not isinstance(auto_check, int)):
     pass
 else:
     if auto_check < 30 or auto_check > 6000:
-        logger.info(f"server_status_auto_check参数为{auto_check}, 正常范围为1~1440, 定时检查将不会生效")
+        logger.info(f"server_status_monitor_refresh_time{auto_check}, 正常范围为1~1440, 定时检查将不会生效")
     else:
         @scheduler.scheduled_job("interval", seconds=auto_check)
         async def check():

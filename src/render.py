@@ -17,7 +17,7 @@ __version__ = (0, 0, 1)
 __author__ = "一块蒙脱石"
 
 
-from typing import TypeAlias, Literal, Union, Optional, Self, overload
+from typing import TypeAlias, Literal, Union, Optional, overload
 from io import BytesIO
 import random
 
@@ -136,7 +136,7 @@ class Frame:
         child: Union["Frame", T_Image],
         xy: Optional[tuple[int, int]] = None,
         size: Optional[tuple[int, int]] = None
-    ) -> Self:
+    ):
         if not isinstance(child, Frame):
             child = image(child)
             child = Frame(                  # trun `PIL.Image.Image` to `Frame`

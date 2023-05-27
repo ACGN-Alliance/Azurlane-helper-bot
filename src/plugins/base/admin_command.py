@@ -1,16 +1,17 @@
+import random
+
 from nonebot import on_command
 from nonebot.permission import SUPERUSER
 from nonebot.matcher import Matcher
 from nonebot.params import CommandArg
 
-from nonebot.adapters.onebot.v11 import MessageEvent, GroupMessageEvent, PrivateMessageEvent, Bot, Message
+from nonebot.adapters.onebot.v11 import MessageEvent, Bot, Message
 
 from src.plugins.utils import send_forward_msg
 from src.plugins.json_utils import JsonUtils as ju
-from src.plugins.base.sync import data_sync
 
 from typing import List, Annotated
-import json
+import json, asyncio
 
 __version__ = "0.0.1-dev"
 
@@ -20,36 +21,43 @@ __usage__ = Message(Message("黑名单功能: \n")
 + Message("3. 清空黑名单[SU]: /黑名单 清空\n")
 + Message("4. 是否在黑名单: /黑名单 查询 [群/人] 号码 *功能名\n"))
 
-# 数据操作部分 #
-update_data = on_command("更新数据", permission=SUPERUSER)
-@update_data.handle()
+reboot = on_command("重启", permission=SUPERUSER)
+@reboot.handle()
 async def _():
-    await update_data.send("正在更新数据...")
-    if(await data_sync()):
-        await update_data.send("更新完成")
-    else:
-        await update_data.send("更新失败, 请检查后台输出")
+    await reboot.finish("正在重启...(注意: 请确保之前是使用nb run --reload启动的bot，否则此功能无法正常使用)")
+    with open("src/plugins/_tmp.py", "w") as f:
+        f.write(str(random.random()))
 
-update_data_on = on_command("自动更新", permission=SUPERUSER)
-@update_data_on.handle()
-async def _(args: Annotated[Message, CommandArg()]):
-    arg = args.extract_plain_text().split()
-    if(len(arg) == 0):
-        await update_data_on.finish("使用方法: 更新设置 [开启/关闭]")
-    elif(arg[0] in ["开启", "on"]):
-        await ju.update_val("data/config.json", "regular_update", True)
-
-        try:
-            from nonebot_plugin_apscheduler import scheduler
-            scheduler.add_job(data_sync, "interval", hour=24)
-        except ImportError:
-            await update_data_on.finish("未检测到nonebot_plugin_apscheduler, 请安装, 否则自动更新无法使用")
-        except Exception as e:
-            await update_data_on.finish(str(e))
-        await update_data_on.finish("自动更新已开启")
-    elif(arg[0] in ["关闭", "off"]):
-        await ju.update_val("data/config.json", "regular_update", False)
-        await update_data_on.finish("自动更新已关闭")
+# 数据操作部分 #
+# update_data = on_command("更新数据", permission=SUPERUSER)
+# @update_data.handle()
+# async def _():
+#     await update_data.send("正在更新数据...")
+#     if(await data_sync()):
+#         await update_data.send("更新完成")
+#     else:
+#         await update_data.send("更新失败, 请检查后台输出")
+#
+# update_data_on = on_command("自动更新", permission=SUPERUSER)
+# @update_data_on.handle()
+# async def _(args: Annotated[Message, CommandArg()]):
+#     arg = args.extract_plain_text().split()
+#     if(len(arg) == 0):
+#         await update_data_on.finish("使用方法: 更新设置 [开启/关闭]")
+#     elif(arg[0] in ["开启", "on"]):
+#         await ju.update_val("data/config.json", "regular_update", True)
+#
+#         try:
+#             from nonebot_plugin_apscheduler import scheduler
+#             scheduler.add_job(data_sync, "interval", hour=24)
+#         except ImportError:
+#             await update_data_on.finish("未检测到nonebot_plugin_apscheduler, 请安装, 否则自动更新无法使用")
+#         except Exception as e:
+#             await update_data_on.finish(str(e))
+#         await update_data_on.finish("自动更新已开启")
+#     elif(arg[0] in ["关闭", "off"]):
+#         await ju.update_val("data/config.json", "regular_update", False)
+#         await update_data_on.finish("自动更新已关闭")
 
 # 黑名单管理 #
 async def clear_blacklist():

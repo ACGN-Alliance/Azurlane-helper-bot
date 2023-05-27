@@ -19,6 +19,11 @@ user:
   can_invited_to_group: false
   # 是否接收好友申请
   can_invited_to_friend: false
+  # 中心控制群
+  # 用于接收机器人的运行状态以及报错的群
+  # 或者执行超管命令
+  # WARNING: 此群人员默认拥有超管权限，请谨慎设置
+  ccg: -1
 
 base:
   # 代理地址
@@ -36,6 +41,12 @@ base:
   # 注意：因为一些技术原因，即使选择了 gitee 和 jsdelivr ，部分数据也会从 github 下载
   # 所以请尽量使用代理，否则可能会出现下载失败的情况
   download_source: "github"
+  # 自动更新间隔
+  # 单位：分钟
+  # -1为关闭自动更新
+  # 注意：为防止网络因素等影响，建议设置在5分钟以上
+  # 即使设置了时间仍需要手动开启自动更新才会生效
+  auto_update_time: -1
 
 bili:
   # 动态自动推送间隔时间
@@ -67,3 +78,14 @@ func:
   # 服务器状态监测刷新间隔
   # 单位：秒
   server_status_monitor_refresh_time: 60
+
+develop:
+  # 是否开启调试模式
+  debug: false
+  # 日志最大缓存大小
+  # 单位：MB
+  log_max_cache_size: 20
+  # 日志最大缓存数量
+  # 单位：个
+  # 推荐设置为3,但不得小于1
+  log_max_cache_num: 3

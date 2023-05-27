@@ -1,7 +1,7 @@
 from typing import Annotated
-
 from httpx import get
-from time import time
+import time
+
 from nonebot.adapters.onebot.v11 import Bot, Message, GroupMessageEvent, MessageEvent
 from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot import on_command
@@ -75,7 +75,8 @@ async def get_server_state(name: str):
 
     if is_updated:
         await ju.update_whole_file(data_dir, ori_data)
-        return msg + Message(f"\n更新时间：{time()}")
+        t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        return msg + Message(f"\n更新时间：{t}")
     else:
         return None
 
@@ -107,7 +108,7 @@ async def push_msg(bot: Bot):
 monitor = on_command("服务器状态监测", priority=5, rule=event_handle, permission=SUPERUSER | GROUP_ADMIN | GROUP_OWNER)
 @monitor.handle()
 async def _(matcher: Matcher, event: MessageEvent, arg: Annotated[Message, CommandArg()]):
-    def turn_on(matcher_: Matcher, *args, server_name_=None):
+    async def turn_on(matcher_: Matcher, *args, server_name_=None):
         if server_name_ is None:
             server_name_ = all_available_server_name
         dic_ = {
@@ -117,7 +118,7 @@ async def _(matcher: Matcher, event: MessageEvent, arg: Annotated[Message, Comma
         await ju.update_or_create_val(user_data_dir, [id_], dic_)
         await matcher_.finish("服务器状态监测已开启")
 
-    def turn_off(matcher_: Matcher, *args, server_name_=None):
+    async def turn_off(matcher_: Matcher, *args, server_name_=None):
 
         res = await ju.get_val(user_data_dir, [id_])
         if server_name_ is None:
@@ -142,9 +143,9 @@ async def _(matcher: Matcher, event: MessageEvent, arg: Annotated[Message, Comma
         await monitor.finish(__usage__)
     elif len(arg_lst) == 1:
         if arg_lst[0] == "开启":
-            turn_on(matcher, server_name_=all_available_server_name)
+            await turn_on(matcher, server_name_=all_available_server_name)
         elif arg_lst[0] == "关闭":
-            turn_off(matcher)
+            await turn_off(matcher)
         elif arg_lst[0] == "查询":
             msg = await get_server_state("官服")
             if msg:
@@ -159,9 +160,9 @@ async def _(matcher: Matcher, event: MessageEvent, arg: Annotated[Message, Comma
             if server not in all_available_server_name:
                 await monitor.finish(f"服务器{server}不存在")
         if arg_lst[0] == "开启":
-            turn_on(matcher, server_name_=server_name)
+            await turn_on(matcher, server_name_=server_name)
         elif arg_lst[0] == "关闭":
-            turn_off(matcher, server_name_=server_name)
+            await turn_off(matcher, server_name_=server_name)
         elif arg_lst[0] == "查询":
             msg = await get_server_state(arg_lst[1])
             if msg:

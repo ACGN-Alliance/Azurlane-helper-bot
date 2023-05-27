@@ -3,8 +3,9 @@ import os.path, sys
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot import get_driver
 from nonebot.log import logger
+from src.plugins.sync.operation import *
 
-from src.plugins.base.sync import data_sync
+# from src.plugins.base.sync import data_sync
 from src.plugins.config import cfg
 
 driver = get_driver()
@@ -16,8 +17,11 @@ async def _(bot: Bot):
 
 @driver.on_startup
 async def init():
-    # TODO config.yaml解析
     # 文件检查
+    proxy = cfg["base"]["network_proxy"]
+    if proxy:
+        set_proxy(proxy)
+
     if not (cfg.get("user") or cfg.get("user").get("super_admin")):
         logger.error("未找到正确配置，请初始化config")
         sys.exit(0)
@@ -26,11 +30,12 @@ async def init():
         sys.exit(0)
 
     if cfg["base"]["startup_update"]:
-        await data_sync()
+        await sync_repo()
     else:
         logger.info("config.yaml中\"startup_update\"选项已关闭, 将不会更新数据")
         if not os.path.exists("data"):
             logger.warning("data文件夹不存在，使用时会报错，请将\"startup_update\"选项打开后重新启动")
+            sys.exit(0)
 
     for user in cfg["user"]["super_admin"]:
         get_driver().config.superusers.add(user)
