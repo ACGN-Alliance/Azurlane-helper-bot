@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+@Author         : mrslouzk
+@Date           : 2023/5/27
+@LastEditors    : mrslouzk
+@LastEditTime   : 2023/5/27
+@Description    : 数据同步
+@GitHub         : https://github.com/MRSlouzk
+"""
+__author__ = "mrslouzk"
+__usage__ = ""
+__version__ = "0.0.2"
+
 from typing import Annotated
 
 from nonebot import on_command

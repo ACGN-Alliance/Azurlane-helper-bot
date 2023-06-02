@@ -1,3 +1,22 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+@Author         : mrslouzk
+@Date           : 2023/4/27
+@LastEditors    : mrslouzk, 一块蒙脱石
+@LastEditTime   : 2023/5/1
+@Description    : 装备渲染与发送
+@GitHub         : https://github.com/MRSlouzk
+"""
+__author__ = "mrslouzk"
+__usage__ = """
+装备查询功能可以查询某个装备的详细信息
+用法: /装备查询 <装备名> 或 /eqif <装备名>
+用例: /装备查询 三联装610mm鱼雷T3
+!!!目前不支持缩写查询!!!
+"""
+__version__ = "0.0.3"
+
 import json
 import os
 from typing import Annotated
@@ -13,12 +32,6 @@ from src.plugins.checker.rule_check import event_handle
 from src.plugins.config import cfg
 from .render import EquipAttr
 
-__usage__ = """
-装备查询功能可以查询某个装备的详细信息
-用法: /装备查询 <装备名> 或 /eqif <装备名>
-用例: /装备查询 三联装610mm鱼雷T3
-!!!目前不支持缩写查询!!!
-"""
 
 data_dir = "data/azurlane/equip/"
 if not cfg["func"]["equip_tmp_dir"]: tmp_dir = data_dir + "tmp/"

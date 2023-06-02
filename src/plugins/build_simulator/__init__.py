@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+@Author         : mrslouzk
+@Date           : 2023/3/5
+@LastEditors    : mrslouzk
+@LastEditTime   : 2023/4/9
+@Description    : 大建模拟器
+@GitHub         : https://github.com/MRSlouzk
+"""
+__author__ = "mrslouzk"
+__usage__ = "https://acgn-alliance.github.io/AZbot-docs/#/usage/utility/%E6%A8%A1%E6%8B%9F%E5%BB%BA%E9%80%A0"
+__version__ = "0.0.2"
+
 from nonebot.adapters.onebot.v11 import (
     MessageSegment,
     Message,

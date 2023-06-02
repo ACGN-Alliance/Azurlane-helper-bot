@@ -13,6 +13,7 @@ from src.plugins.config import cfg
 from src.plugins.json_utils import JsonUtils as ju
 from src.plugins.checker.rule_check import event_handle
 from src.plugins.utils import send_forward_msg_type
+from src.plugins._error import report_error
 
 data_dir = "./data/azurlane/server/server_status.json"
 user_data_dir = "./data/azurlane/server/server_status_user.json"
@@ -27,7 +28,7 @@ __usage__ = """服务器状态监测
 all_available_server_name = ["日服", "官服", "渠道服", "ios"]
 all_server_name = ["日服", "官服", "渠道服", "ios", "B服", "bilibili"]
 
-def get_server_ip(server_name: str):
+async def get_server_ip(server_name: str):
     if server_name == "日服":
         return "http://18.179.191.97/?cmd=load_server?"
     elif server_name in ["官服", "B服", "bilibili"]:
@@ -37,7 +38,9 @@ def get_server_ip(server_name: str):
     elif server_name in ["ios", "苹果"]:
         return "http://101.37.104.227/?cmd=load_server?"
     else:
-        raise Exception("不存在该服务器， 目前支持的服务器有：日服、官服(B服/bilibili)、渠道服、ios(苹果)")
+        msg = "不存在该服务器， 目前支持的服务器有：日服、官服(B服/bilibili)、渠道服、ios(苹果)"
+        await report_error(msg)
+        raise Exception(msg)
 
 async def get_server_state(name: str):
     all_status = {
@@ -48,7 +51,7 @@ async def get_server_state(name: str):
     }
     is_updated = False
 
-    ip = get_server_ip(name)
+    ip = await get_server_ip(name)
     resp = get(ip)
     if resp.status_code != 200:
         return Message("服务器状态推送出错")

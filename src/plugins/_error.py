@@ -30,10 +30,13 @@ def error_handler(func):
                 f.write(format_exc())
     return wrapper
 
-async def report_error(err: str, *args, matcher: Matcher = None, func: str = ""):
+async def report_error(err: str | BaseException, *args, matcher: Matcher = None, func: str = ""):
     """
     错误上报函数, 并保存至error.log
     """
+    if isinstance(err, BaseException):
+        err = str(err)
+
     if not os.path.exists("logs"):
         os.mkdir("logs")
     if matcher:
@@ -44,7 +47,8 @@ async def report_error(err: str, *args, matcher: Matcher = None, func: str = "")
         name = "未知函数"
     (bot, ) = get_bots().values()
     logger.error(f"在执行{name}时发生错误: {err}")
-    await matcher.send(err)
+    if matcher:
+        await matcher.send(err)
     if ccg != -1:
         await bot.send_group_msg(group_id=ccg, message=f"在执行{name}时发生错误: {err}")
 

@@ -1,8 +1,9 @@
-import json, random
+import random
 from typing import List
 
 from src.plugins.exception import DataMeteringException
 from src.plugins.json_utils import JsonUtils as ju
+from src.plugins._error import report_error
 
 async def build_simulator(
                         pool_type: str = "qx",
@@ -89,6 +90,7 @@ async def build_simulator(
                         break
                     
             if not is_selected:
+                await report_error(DataMeteringException("建造池"))
                 raise DataMeteringException("建造池")
     
     return result_lst
