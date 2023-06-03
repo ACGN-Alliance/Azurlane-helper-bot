@@ -1,11 +1,11 @@
-import os.path, sys
+import os.path
 
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot import get_driver
-from nonebot.log import logger, default_format
+from nonebot.log import default_format
 
 from src.plugins.sync.operation import *
-from src.plugins.server_status import check
+from src.plugins.server_status.utils import check
 from src.plugins.config import cfg
 from nonebot_plugin_apscheduler import scheduler
 
