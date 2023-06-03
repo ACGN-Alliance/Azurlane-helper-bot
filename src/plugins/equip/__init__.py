@@ -46,7 +46,7 @@ equip_info = on_command(cmd="装备查询", aliases={"eqif"}, rule=event_handle)
 
 @equip_info.handle()
 async def _(bot: Bot, matcher: Matcher, event: MessageEvent, arg: Message = CommandArg()):
-    if not await cd.is_cd_down(matcher, event, bot, need_reset=True):
+    if not await cd.is_cd_down(matcher, event, bot, need_reset=False):
         await equip_info.finish("功能冷却中...")
     args = arg.extract_plain_text().split()
     if len(args) != 1:
@@ -69,4 +69,5 @@ async def _(bot: Bot, matcher: Matcher, event: MessageEvent, arg: Message = Comm
         else:
             msg = Message("装备渲染模式配置错误, 请联系管理员")
 
+        await cd.set_cd_time(matcher, event, bot)
         await equip_info.finish(msg)

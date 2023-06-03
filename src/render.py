@@ -21,7 +21,7 @@ from typing import TypeAlias, Literal, Union, Optional, overload
 from io import BytesIO
 import random
 
-import requests
+import httpx
 from PIL import Image, ImageDraw, ImageFont
 
 
@@ -299,11 +299,13 @@ def image(im: T_Image) -> Image.Image:
     try:
         return Image.open(im)
     except:
+        from src.plugins.config import cfg
+        proxy = cfg["base"]["network_proxy"]
         io = BytesIO()
         if isinstance(im, str):
             im = im.encode()
         io.write(
-            requests.get(im).content
+            httpx.get(im, proxies=proxy).content
             if im.startswith(b"http")
             else im
         )
