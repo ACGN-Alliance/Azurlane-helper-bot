@@ -53,7 +53,7 @@ def sync_repo():
         checkout_branch("data", repo, force=True)
         remote = [x for x in repo.remote().repo.heads if "data" in x.name][0]
         try:
-            remote.fetch(kill_after_timeout=20)
+            repo.remote().fetch(kill_after_timeout=20)
             # logger.info("数据仓库远端同步完成")
         except Exception as e:
             logger.error(f"同步数据仓库失败: {e}")
@@ -65,7 +65,7 @@ def sync_repo():
             return None
         else:
             logger.info(f"数据仓库正在更新: {local_ver} -> {remote_ver}")
-            repo.remote().update()
+            repo.remote().pull()
             logger.info("数据仓库已更新")
             return True
 
