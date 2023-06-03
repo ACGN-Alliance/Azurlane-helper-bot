@@ -103,4 +103,5 @@ async def _(event: GroupMessageEvent):
     if len(req) == 0:
         await group_approve_list.finish("目前没有未处理的加群申请~")
 
+    # TODO 未完成
     # TODO 测试JsonUtils功能([]属性)

@@ -89,6 +89,7 @@ def local_file_check():
     data_file = [
         "data/group.json",
         "data/user.json",
+        "data/cd.json",
         "data/group_cmd.json",
         "data/group_func.json",
         "data/config.json",
