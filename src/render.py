@@ -304,11 +304,18 @@ def image(im: T_Image) -> Image.Image:
         io = BytesIO()
         if isinstance(im, str):
             im = im.encode()
-        io.write(
-            httpx.get(im, proxies=proxy).content
-            if im.startswith(b"http")
-            else im
-        )
+        if proxy:
+            io.write(
+                httpx.get(im, proxies=proxy).content
+                if im.startswith(b"http")
+                else im
+            )
+        else:
+            io.write(
+                httpx.get(im).content
+                if im.startswith(b"http")
+                else im
+            )
         return Image.open(io)
 
 
