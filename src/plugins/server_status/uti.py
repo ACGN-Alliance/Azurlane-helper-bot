@@ -7,7 +7,11 @@ from nonebot.log import logger
 from src.plugins.json_utils import JsonUtils as ju
 from src.plugins.utils import send_forward_msg_type
 from src.plugins._error import report_error
+from src.plugins.config import cfg
 
+data_dir = "./data/server/server_status.json"
+user_data_dir = "./data/server/server_status_user.json"
+interval_time = cfg["func"]["server_status_monitor_refresh_time"]
 all_available_server_name = ["日服", "官服", "渠道服", "ios"]
 all_server_name = ["日服", "官服", "渠道服", "ios", "B服", "bilibili"]
 

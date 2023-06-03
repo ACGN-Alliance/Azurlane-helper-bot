@@ -34,7 +34,7 @@ async def clear_blacklist():
 
     return Message("清空完成")
 
-def get_data(type_: str):
+async def get_data(type_: str):
     if(type_ == "群"): data = await ju.get_val("data/group.json", [])
     elif(type_ == "人"): data = await ju.get_val("data/user.json", [])
     else: return Message("参数错误")
@@ -43,7 +43,7 @@ def get_data(type_: str):
     return data
 
 async def add_blacklist(type_: str, id_: str, func: str = "") -> Message:
-    data = get_data(type_)
+    data = await get_data(type_)
     if(isinstance(data, Message)): return data
 
     if(not func):
@@ -58,7 +58,7 @@ async def add_blacklist(type_: str, id_: str, func: str = "") -> Message:
     return Message("添加完成")
 
 async def del_blacklist(type_: str, id_: str, func: str = "") -> Message:
-    data = get_data(type_)
+    data = await get_data(type_)
     if(isinstance(data, Message)): return data
     
     if(not func):
@@ -75,7 +75,7 @@ async def del_blacklist(type_: str, id_: str, func: str = "") -> Message:
     return Message("删除完成")
 
 async def check_blacklist(type_: str, id_: str, func: str = "") -> List[Message] | Message | None:
-    data = get_data(type_)
+    data = await get_data(type_)
     if(isinstance(data, Message)): return data
 
     banned_list = []

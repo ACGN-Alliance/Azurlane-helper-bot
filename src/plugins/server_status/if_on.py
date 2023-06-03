@@ -11,20 +11,13 @@ from nonebot.permission import SUPERUSER
 from src.plugins.config import cfg
 from src.plugins.json_utils import JsonUtils as ju
 from src.plugins.checker.rule_check import event_handle
-from .uti import get_server_state
-
-data_dir = "./data/server/server_status.json"
-user_data_dir = "./data/server/server_status_user.json"
-interval_time = cfg["func"]["server_status_monitor_refresh_time"]
+from .uti import get_server_state, all_available_server_name, user_data_dir
 
 __usage__ = """服务器状态监测
 %服务器状态监测 开启/关闭 [服务器名]
 %服务器状态监测 查询 [服务器名]
 服务器名可选参数：日服、官服(B服/bilibili)、渠道服、ios(苹果)
 """
-
-all_available_server_name = ["日服", "官服", "渠道服", "ios"]
-all_server_name = ["日服", "官服", "渠道服", "ios", "B服", "bilibili"]
 
 monitor = on_command("服务器状态监测", priority=5, rule=event_handle, permission=SUPERUSER | GROUP_ADMIN | GROUP_OWNER)
 @monitor.handle()
