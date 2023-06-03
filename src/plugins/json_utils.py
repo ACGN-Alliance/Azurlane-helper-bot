@@ -9,15 +9,19 @@ class JsonUtils:
     encode = "utf-8"
 
     @staticmethod
-    def get_next_floor(raw, key: int | str):
+    def get_next_floor(raw, key: int | str, *args, create: bool = False):
         try:
             if(isinstance(key, int)):
                 return raw[key]
             else:
                 return raw.get(key)
         except AttributeError:
+            if create:
+                return None
             raise Exception(f"{raw}下一层级不是字典，无法获取键{key}")
         except KeyError:
+            if create:
+                return None
             raise Exception(f"{raw}下一层级不是列表，无法获取索引{key}")
         except IndexError:
             raise Exception(f"{raw}下一层级索引{key}超出范围，最大索引为{len(raw) - 1}")
@@ -224,7 +228,7 @@ class JsonUtils:
 
         for key in key_path:
             if(is_first):
-                val = cls.get_next_floor(raw, key)
+                val = cls.get_next_floor(raw, key, create=True)
                 if(val is None):
                     if isinstance(key, int):
                         raw.update({key: []})
