@@ -83,6 +83,8 @@ async def push_msg(bot: Bot):
         if len(v["server"]) == 0:
             continue
         elif len(v["server"]) == 1:
+            if not all_data[v["server"][0]]:
+                continue
             if v["type"] == "group":
                 await bot.send_group_msg(group_id=int(id_), message=all_data[v["server"][0]])
             elif v["type"] == "private":
@@ -90,7 +92,11 @@ async def push_msg(bot: Bot):
         else:
             msg = []
             for server in v["server"]:
+                if not all_data[server]:
+                    continue
                 msg.append(all_data[server])
+            if len(msg) == 0:
+                continue
             if v["type"] == "group":
                 await send_forward_msg_type(bot=bot, type="group", name="服务器状态", gid=int(id_), msgs=msg)
             elif v["type"] == "private":
