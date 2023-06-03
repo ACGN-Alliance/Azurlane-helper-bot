@@ -47,13 +47,14 @@ async def local_and_remote_ver():
     else:
         return None, None
 
-async def sync_repo():
+def sync_repo():
     if os.path.exists("./data/remote"):
         repo = Repo("./data/remote")
         checkout_branch("data", repo, force=True)
         remote = [x for x in repo.remote().repo.heads if "data" in x.name][0]
         try:
             remote.fetch(kill_after_timeout=20)
+            logger.info("数据仓库远端同步完成")
         except Exception as e:
             logger.error(f"同步数据仓库失败: {e}")
             raise e
@@ -63,6 +64,7 @@ async def sync_repo():
             return None
         else:
             repo.remote().update()
+            logger.info("数据仓库已更新")
             return True
 
     else:
@@ -76,7 +78,7 @@ async def sync_repo():
             logger.error(f"克隆数据仓库失败: {e}")
             raise e
 
-async def local_file_check():
+def local_file_check():
     data_path_lst = ["data/azurlane", "data/word_bank", "data/bili", "data/equip", "data/server"]
     for path in data_path_lst:
         if not os.path.exists(path):

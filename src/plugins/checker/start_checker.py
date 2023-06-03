@@ -32,8 +32,8 @@ async def init():
         sys.exit(0)
 
     if cfg["base"]["startup_update"]:
-        await local_file_check()
-        if (await sync_repo()):
+        local_file_check()
+        if sync_repo():
             logger.info("数据更新成功")
     else:
         logger.info("config.yaml中\"startup_update\"选项已关闭, 将不会更新数据")

@@ -26,7 +26,7 @@ async def event_handle(event: Event, bot: Bot, state: T_State) -> bool:
         except TypeError:
             return False
         except FileNotFoundError:
-            await local_file_check()
+            local_file_check()
             return False
         if text_.get(cmd_) is None:
             text_.update({cmd_: []})
@@ -46,14 +46,14 @@ async def event_handle(event: Event, bot: Bot, state: T_State) -> bool:
         except TypeError:
             return False
         except FileNotFoundError:
-            await local_file_check()
+            local_file_check()
             return False
         if text.get(cmd) is None:
             text.update({cmd: []})
             try:
                 open("data/group.json", "w", encoding="utf-8").write(json.dumps(text))
             except FileNotFoundError:
-                await local_file_check()
+                local_file_check()
                 return False
             if(await user_check(event.user_id)):
                 return True
@@ -92,7 +92,7 @@ async def notice_handle(event: NoticeEvent):
         try:
             text = json.load(open("data/group_func.json", "r", encoding="utf-8"))
         except FileNotFoundError:
-            await local_file_check()
+            local_file_check()
             return False
         _if = await _if_exist_func(text, "data/group_func.json", "group_welcome")
         if not _if: return False
@@ -106,7 +106,7 @@ async def chat_handle(event: MessageEvent):
     try:
         text = json.load(open("data/group_func.json", "r", encoding="utf-8"))
     except FileNotFoundError:
-        await local_file_check()
+        local_file_check()
         return False
     _if = await _if_exist_func(text, "data/group_func.json", "group_chat")
     if not _if: return False
@@ -117,7 +117,7 @@ async def bili_handle(event: GroupMessageEvent):
     try:
         text = json.load(open("data/group_func.json", "r", encoding="utf-8"))
     except FileNotFoundError:
-        await local_file_check()
+        local_file_check()
         return False
     _if = await _if_exist_func(text, "data/group_func.json", "bili")
     if not _if: return False
