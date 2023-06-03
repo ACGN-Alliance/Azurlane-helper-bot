@@ -17,11 +17,11 @@ class JsonUtils:
                 return raw.get(key)
         except AttributeError:
             if create:
-                return None
+                return 1
             raise Exception(f"{raw}下一层级不是字典，无法获取键{key}")
         except KeyError:
             if create:
-                return None
+                return 1
             raise Exception(f"{raw}下一层级不是列表，无法获取索引{key}")
         except IndexError:
             raise Exception(f"{raw}下一层级索引{key}超出范围，最大索引为{len(raw) - 1}")
@@ -229,7 +229,7 @@ class JsonUtils:
         for key in key_path:
             if(is_first):
                 val = cls.get_next_floor(raw, key, create=True)
-                if(val is None):
+                if not val:
                     if isinstance(key, int):
                         raw.update({key: []})
                     else:
@@ -238,7 +238,7 @@ class JsonUtils:
                     is_first = False
                     continue
                 else:
-                    if(len(key_path) == 1):
+                    if len(key_path) == 1:
                         raw[key] = value
                         with open(cls.path_prefix + str(file_path), "w", encoding=cls.encode) as f:
                             f.write(json.dumps(raw, ensure_ascii=cls.enable_ascii, indent=cls.indent))
