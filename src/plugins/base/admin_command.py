@@ -143,7 +143,7 @@ ver = on_command("版本", permission=SUPERUSER)
 async def _():
     await ver.finish(f"当前版本：{__version__}")
 
-su_list = on_command("su-list", permission=SUPERUSER)
+su_list = on_command("su-list")
 @su_list.handle()
 async def _():
     logger.info(get_driver().config.superusers)
