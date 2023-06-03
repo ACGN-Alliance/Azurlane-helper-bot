@@ -29,7 +29,7 @@ class CDTime:
         设置CD时间
         """
         name = matcher.state["_prefix"]["command"][0]
-        cd = await ju.get_val("data/cd.json", [name. event.user_id])
+        cd = await ju.get_val("data/cd.json", [name, event.user_id])
         cool_time = cfg["base"]["default_cooldown_time"][0]["func"]
 
         if use_config:
