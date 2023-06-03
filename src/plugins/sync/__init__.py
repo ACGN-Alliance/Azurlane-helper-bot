@@ -44,7 +44,7 @@ async def _():
 
 update_data_on = on_command("自动更新", permission=SUPERUSER)
 @update_data_on.handle()
-async def _(args: Annotated[Message, CommandArg()]):
+async def _(args: Message = CommandArg()):
     arg = args.extract_plain_text().split()
     if len(arg) == 0:
         await update_data_on.finish("使用方法: %自动更新 [开启/关闭]")

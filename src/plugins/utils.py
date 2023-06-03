@@ -7,7 +7,6 @@ from nonebot.adapters.onebot.v11 import (Message,
                                          GROUP_ADMIN,
                                          GROUP_OWNER)
 from nonebot.matcher import Matcher
-from nonebot import get_bots
 from nonebot.permission import SUPERUSER
 from nonebot.exception import ActionFailed
 from typing import List
@@ -17,7 +16,7 @@ from src.plugins.json_utils import JsonUtils as ju
 from src.plugins.config import cfg
 
 class CDTime:
-    (bot, ) = get_bots().values()
+    # (bot, ) = get_bots().values()
     @classmethod
     async def set_cd_time(cls,
                           matcher: Matcher,
@@ -47,6 +46,7 @@ class CDTime:
     async def is_cd_down(cls,
                          matcher: Matcher,
                          event: MessageEvent,
+                         bot: Bot,
                          *args,
                          cdtime: int = 60,
                          need_reset: bool = True,
@@ -56,7 +56,7 @@ class CDTime:
         判断CD时间是否到了
         """
         if ignore_admin:
-            if SUPERUSER(cls.bot, event) or GROUP_ADMIN(cls.bot, event) or GROUP_OWNER(cls.bot, event):
+            if SUPERUSER(bot, event) or GROUP_ADMIN(bot, event) or GROUP_OWNER(bot, event):
                 return True
 
         name = matcher.state["_prefix"]["command"][0]

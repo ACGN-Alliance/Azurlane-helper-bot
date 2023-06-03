@@ -34,7 +34,7 @@ from .simulator import build_simulator
 bsm = on_command("模拟建造", rule=event_handle)
 @bsm.handle()
 async def build_sim(bot: Bot, event: MessageEvent, matcher: Matcher, arg: Annotated[Message, CommandArg()]):
-    if await cd.is_cd_down(matcher, event, need_reset=True):
+    if await cd.is_cd_down(matcher, event, bot, need_reset=True):
         await bsm.finish("功能冷却中...")
     build_type = ["qx", "zx", "tx", "xd"]
     args = arg.extract_plain_text().split(" ")

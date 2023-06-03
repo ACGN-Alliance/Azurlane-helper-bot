@@ -24,7 +24,7 @@ from io import BytesIO
 
 from nonebot import on_command
 from nonebot.adapters.onebot.v11 import (
-    MessageSegment, Message, MessageEvent
+    MessageSegment, Message, MessageEvent, Bot
 )
 from nonebot.params import CommandArg
 from nonebot.matcher import Matcher
@@ -54,8 +54,8 @@ equip_info = on_command(cmd="装备查询", aliases={"eqif"}, rule=event_handle)
 
 
 @equip_info.handle()
-async def _(matcher: Matcher, event: MessageEvent, arg: Annotated[Message, CommandArg()]):
-    if await cd.is_cd_down(matcher, event, need_reset=True):
+async def _(bot: Bot, matcher: Matcher, event: MessageEvent, arg: Annotated[Message, CommandArg()]):
+    if await cd.is_cd_down(matcher, event, bot, need_reset=True):
         await equip_info.finish("功能冷却中...")
     args = arg.extract_plain_text().split("")
     if len(args) != 1:
