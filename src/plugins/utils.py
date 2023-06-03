@@ -30,14 +30,14 @@ class CDTime:
         """
         name = matcher.state["_prefix"]["command"][0]
         cd = await ju.get_val("data/cd.json", [name, event.user_id])
-        cool_time = cfg["base"]["default_cooldown_time"][0]["func"]
+        cool_time = cfg["base"]["default_cooldown_time"]
 
         if use_config:
             # 获取自定义冷却时间
-            if cool_time.get("name"):
-                cdtime = cool_time["name"]
+            if cool_time.get(name):
+                cdtime = cool_time[0]["func"][name]
             else:
-                cdtime = cool_time["global"]
+                cdtime = cool_time[1]["global"]
 
         if not cd:
             await ju.update_or_create_val("data/cd.json", [name, event.user_id], int(time.time()) + cdtime)
