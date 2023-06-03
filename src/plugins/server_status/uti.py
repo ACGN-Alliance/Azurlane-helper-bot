@@ -62,7 +62,7 @@ async def get_server_state(name: str):
                 continue
 
         is_updated = True
-        ori_data[name].update({server["name"]: server["state"]})
+        ori_data[name] = {server["name"]: server["state"]}
         msg += Message(f"{server['name']}：{all_status[server['state']]}, 状态码：{server['state']}\n")
 
     if is_updated:

@@ -51,6 +51,8 @@ async def init():
         else:
             scheduler.add_job(check, "interval", seconds=auto_check)
 
-    for user in cfg["user"]["super_admin"]:
-        # TODO ccg群成员加入超管
-        get_driver().config.superusers.add(user)
+    su = set(cfg["user"]["super_admin"])
+    # TODO ccg群成员加入超管
+    get_driver().config.superusers = su
+
+    print(get_driver().config.superusers)

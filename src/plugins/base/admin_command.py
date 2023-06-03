@@ -1,9 +1,10 @@
 import random
 
-from nonebot import on_command
+from nonebot import on_command, get_driver
 from nonebot.permission import SUPERUSER
 from nonebot.matcher import Matcher
 from nonebot.params import CommandArg
+from nonebot.log import logger
 
 from nonebot.adapters.onebot.v11 import MessageEvent, Bot, Message
 
@@ -141,3 +142,8 @@ ver = on_command("版本", permission=SUPERUSER)
 @ver.handle()
 async def _():
     await ver.finish(f"当前版本：{__version__}")
+
+su_list = on_command("su-list", permission=SUPERUSER)
+@su_list.handle()
+async def _():
+    logger.info(get_driver().config.superusers)
