@@ -61,7 +61,7 @@ async def _(matcher: Matcher, event: MessageEvent, arg: Message = CommandArg()):
         elif arg_lst[0] == "关闭":
             await turn_off(matcher)
         elif arg_lst[0] == "查询":
-            msg = await get_server_state("官服")
+            msg = await get_server_state("官服", need_to_check=False)
             if msg:
                 await monitor.send(msg)
             else:
@@ -78,7 +78,7 @@ async def _(matcher: Matcher, event: MessageEvent, arg: Message = CommandArg()):
         elif arg_lst[0] == "关闭":
             await turn_off(matcher, server_name_=server_name)
         elif arg_lst[0] == "查询":
-            msg = await get_server_state(arg_lst[1])
+            msg = await get_server_state(arg_lst[1], need_to_check=False)
             if msg:
                 await monitor.send(msg)
             else:

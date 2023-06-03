@@ -29,7 +29,7 @@ async def get_server_ip(server_name: str):
         await report_error(msg)
         raise Exception(msg)
 
-async def get_server_state(name: str):
+async def get_server_state(name: str, *args, need_to_check: bool=True):
     all_status = {
         0: "已开启",
         1: "未开启",
@@ -54,12 +54,13 @@ async def get_server_state(name: str):
     for server in resp.json():
         server_name = server["name"]
         status = server["state"]
-        if ori_data.get(name):
-            if not ori_data[name].get(server_name):
-                ori_data[name].update({server["name"]: server["state"]})
-                continue
-            if ori_data[name][server_name] == status:
-                continue
+        if need_to_check:
+            if ori_data.get(name):
+                if not ori_data[name].get(server_name):
+                    ori_data[name].update({server["name"]: server["state"]})
+                    continue
+                if ori_data[name][server_name] == status:
+                    continue
 
         is_updated = True
         ori_data[name] = {server["name"]: server["state"]}
