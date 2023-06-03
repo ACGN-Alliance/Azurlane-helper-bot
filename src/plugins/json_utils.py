@@ -115,7 +115,7 @@ class JsonUtils:
             await cls.init_json(file_path)
 
         with open(cls.path_prefix + str(file_path), "w", encoding=cls.encode) as f:
-            f.write(json.dumps(value, ensure_ascii=cls.enable_ascii, indent=cls.indent))
+            json.dump(value, f, ensure_ascii=cls.enable_ascii, indent=cls.indent)
         return True
 
     @classmethod

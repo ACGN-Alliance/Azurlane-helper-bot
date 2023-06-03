@@ -58,6 +58,7 @@ async def report_error(err: str | BaseException, *args, matcher: Matcher = None,
     if len(e_lst) == 0:
         with open(f"logs/error-1.log", "w", encoding="utf-8") as f:
             f.write(err_info)
+        return
 
     if os.path.getsize(f"logs/error-{len(e_lst)}.log") > (1024 * log_max_cache_size):
         if (len(e_lst) >= log_max_cache_num):
