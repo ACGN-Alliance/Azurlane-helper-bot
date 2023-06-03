@@ -15,8 +15,8 @@ from src.plugins.checker.rule_check import event_handle
 from src.plugins.utils import send_forward_msg_type
 from src.plugins._error import report_error
 
-data_dir = "./data/azurlane/server/server_status.json"
-user_data_dir = "./data/azurlane/server/server_status_user.json"
+data_dir = "./data/server/server_status.json"
+user_data_dir = "./data/server/server_status_user.json"
 interval_time = cfg["func"]["server_status_monitor_refresh_time"]
 
 __usage__ = """服务器状态监测

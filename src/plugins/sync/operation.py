@@ -77,7 +77,7 @@ async def sync_repo():
             raise e
 
 async def local_file_check():
-    data_path_lst = ["data/azurlane", "data/word_bank", "data/bili", "data/equip"]
+    data_path_lst = ["data/azurlane", "data/word_bank", "data/bili", "data/equip", "data/server"]
     for path in data_path_lst:
         if not os.path.exists(path):
             os.makedirs(path)
@@ -88,7 +88,9 @@ async def local_file_check():
         "data/group_cmd.json",
         "data/group_func.json",
         "data/config.json",
-        "data/bili/latest.json"
+        "data/bili/latest.json",
+        "data/server/server_status.json",
+        "/data/server/server_status_user.json"
     ]
     # await ju.init_many_jsons(data_file, init_val=init_val)
     for file in data_file:
