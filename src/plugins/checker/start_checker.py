@@ -2,11 +2,13 @@ import os.path, sys
 
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot import get_driver
+import nonebot
 from nonebot.log import logger, default_format
 from src.plugins.sync.operation import *
 
-# from src.plugins.base.sync import data_sync
+from src.plugins.server_status import check, push_msg
 from src.plugins.config import cfg
+from nonebot_plugin_apscheduler import scheduler
 
 driver = get_driver()
 @driver.on_bot_connect
@@ -39,6 +41,16 @@ async def init():
         if not os.path.exists("data"):
             logger.warning("data文件夹不存在，使用时会报错，请将\"startup_update\"选项打开后重新启动")
             sys.exit(0)
+
+    # 需要读取文件无法直接预加载
+    auto_check = cfg["func"]["server_status_monitor_refresh_time"]
+    if (not isinstance(auto_check, int)):
+        pass
+    else:
+        if auto_check < 30 or auto_check > 6000:
+            logger.info(f"server_status_monitor_refresh_time{auto_check}, 正常范围为1~1440, 定时检查将不会生效")
+        else:
+            scheduler.add_job(check, "interval", seconds=auto_check)
 
     for user in cfg["user"]["super_admin"]:
         # TODO ccg群成员加入超管
