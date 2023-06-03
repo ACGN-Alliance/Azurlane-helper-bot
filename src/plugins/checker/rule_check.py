@@ -7,6 +7,7 @@ from nonebot.adapters.onebot.v11 import (MessageEvent,
                                         NoticeEvent,
                                         Event,
                                         Bot)
+from nonebot import get_driver
 import json
 
 from src.plugins.config import black_list
@@ -18,6 +19,8 @@ async def event_handle(event: Event, bot: Bot, state: T_State) -> bool:
 
     """
     async def user_check(user_id: int) -> bool:
+        if str(user_id) in get_driver().config.superusers:
+            return True
         if user_id in black_list:
             return False
         try:

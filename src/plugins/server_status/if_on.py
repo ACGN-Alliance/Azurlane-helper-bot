@@ -62,14 +62,16 @@ async def get_server_state(name: str):
     if not ori_data:
         write_data = ori_data
         for server in resp.json():
-            write_data[name] = {}
-            write_data[name].update({server["name"]: server["state"]})
+            write_data[name] = {server["name"]: server["state"]}
         await ju.update_whole_file(data_dir, write_data)
 
     for server in resp.json():
         server_name = server["name"]
         status = server["state"]
         if ori_data.get(name):
+            if not ori_data[name].get(server_name):
+                ori_data[name].update({server["name"]: server["state"]})
+                continue
             if ori_data[name][server_name] == status:
                 continue
 
