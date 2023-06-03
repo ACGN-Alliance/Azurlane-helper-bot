@@ -25,7 +25,7 @@ msg = on_message(rule=chat_handle, priority=99)
 async def _(bot: Bot, event: MessageEvent):
 
     # 监测默认关键词并回复
-    kw_lst = json.load(open("data/work_bank/default.json", "r", encoding="utf-8"))
+    kw_lst = json.load(open("data/remote/work_bank/default.json", "r", encoding="utf-8"))
     for kw in kw_lst:
         if(event.get_plaintext().find(kw) != -1):
             await msg.finish(kw_lst[kw])

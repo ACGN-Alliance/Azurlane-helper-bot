@@ -15,3 +15,5 @@ __usage__ = """服务器状态监测
 服务器名可选参数：日服、官服(B服/bilibili)、渠道服、ios(苹果)
 """
 __version__ = "0.0.1"
+
+from .if_on import *
