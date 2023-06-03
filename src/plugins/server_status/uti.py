@@ -80,17 +80,16 @@ async def push_msg(bot: Bot):
         status = await get_server_state(server)
         all_data[server] = status
     for id_, v in r.items():
-        server_lst = r[id_]
-        if len(server_lst) == 0:
+        if len(v["server"]) == 0:
             continue
-        elif len(server_lst) == 1:
+        elif len(v["server"]) == 1:
             if v["type"] == "group":
-                await bot.send_group_msg(group_id=int(id_), message=all_data[server_lst[0]])
+                await bot.send_group_msg(group_id=int(id_), message=all_data[v["server"][0]])
             elif v["type"] == "private":
-                await bot.send_private_msg(user_id=int(id_), message=all_data[server_lst[0]])
+                await bot.send_private_msg(user_id=int(id_), message=all_data[v["server"][0]])
         else:
             msg = []
-            for server in server_lst:
+            for server in v["server"]:
                 msg.append(all_data[server])
             if v["type"] == "group":
                 await send_forward_msg_type(bot=bot, type="group", name="服务器状态", gid=int(id_), msgs=msg)
