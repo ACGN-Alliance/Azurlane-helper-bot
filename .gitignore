@@ -144,5 +144,6 @@ test/
 .VSCodeCounter/
 gocq/
 bili/
+bot.py
 
 # End of https://www.toptal.com/developers/gitignore/api/python.pdm-python

@@ -90,12 +90,6 @@ async def local_file_check():
         "data/config.json",
         "data/bili/latest.json"
     ]
-    init_val = [
-        {},
-        {
-            "global": []
-        }
-    ]
     await ju.init_many_jsons(data_file, init_val=init_val)
     for file in data_file:
         if not os.path.exists(file):
