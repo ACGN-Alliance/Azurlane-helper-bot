@@ -34,7 +34,7 @@ class CDTime:
 
         if use_config:
             # 获取自定义冷却时间
-            if cool_time.get(name):
+            if cool_time[0]["func"].get(name):
                 cdtime = cool_time[0]["func"][name]
             else:
                 cdtime = cool_time[1]["global"]
