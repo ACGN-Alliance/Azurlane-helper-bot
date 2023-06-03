@@ -38,4 +38,5 @@ async def init():
             sys.exit(0)
 
     for user in cfg["user"]["super_admin"]:
+        # TODO ccg群成员加入超管
         get_driver().config.superusers.add(user)

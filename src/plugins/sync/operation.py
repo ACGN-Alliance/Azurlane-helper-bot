@@ -36,6 +36,15 @@ def checkout_branch(
         repo.create_head(name)
         repo.heads[name].checkout(force=force)
 
+async def local_and_remote_ver():
+    if os.path.exists("./data/remote"):
+        repo = Repo("./data/remote")
+        checkout_branch("data", repo, force=True)
+        remote = [x for x in repo.remote().repo.heads if "data" in x.name][0]
+        return str(next(repo.iter_commits()))[:7], str(next(remote.repo.iter_commits(remote.repo.heads[0].name)))[:7]
+    else:
+        return None, None
+
 async def sync_repo():
     if os.path.exists("./data/remote"):
         repo = Repo("./data/remote")

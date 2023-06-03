@@ -23,7 +23,7 @@ from nonebot_plugin_apscheduler import scheduler
 from src.plugins.config import cfg
 from src.plugins._error import *
 
-from .operation import sync_repo
+from .operation import sync_repo, local_and_remote_ver
 
 update_data = on_command("更新数据", permission=SUPERUSER)
 @update_data.handle()
@@ -35,6 +35,12 @@ async def _():
     except Exception as e:
         await report_error(format_exc(), update_data)
         await update_data.send("更新失败, 请检查后台输出")
+
+query_update = on_command("查询更新", permission=SUPERUSER)
+@query_update.handle()
+async def _():
+    res = await local_and_remote_ver()
+    await query_update.finish(f"当前版本: {res[0]}\n最新版本: {res[1]}")
 
 update_data_on = on_command("自动更新", permission=SUPERUSER)
 @update_data_on.handle()
