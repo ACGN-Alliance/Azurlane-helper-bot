@@ -38,7 +38,7 @@ def checkout_branch(
         repo.create_head(name)
         repo.heads[name].checkout(force=force)
 
-async def local_and_remote_ver():
+def local_and_remote_ver():
     if os.path.exists("./data/remote"):
         repo = Repo("./data/remote")
         checkout_branch("data", repo, force=True)
@@ -54,15 +54,17 @@ def sync_repo():
         remote = [x for x in repo.remote().repo.heads if "data" in x.name][0]
         try:
             remote.fetch(kill_after_timeout=20)
-            logger.info("数据仓库远端同步完成")
+            # logger.info("数据仓库远端同步完成")
         except Exception as e:
             logger.error(f"同步数据仓库失败: {e}")
             raise e
 
+        (local_ver, remote_ver) = local_and_remote_ver()
         if str(next(repo.iter_commits()))[:7] == str(next(remote.repo.iter_commits(remote.repo.heads[0].name)))[:7]:
-            logger.info("数据仓库已是最新版本")
+            logger.info(f"{local_ver}(local)={remote_ver}(remote), 数据仓库已是最新版本")
             return None
         else:
+            logger.info(f"数据仓库正在更新: {local_ver} -> {remote_ver}")
             repo.remote().update()
             logger.info("数据仓库已更新")
             return True
@@ -92,7 +94,7 @@ def local_file_check():
         "data/config.json",
         "data/bili/latest.json",
         "data/server/server_status.json",
-        "/data/server/server_status_user.json"
+        "data/server/server_status_user.json"
     ]
     # await ju.init_many_jsons(data_file, init_val=init_val)
     for file in data_file:
