@@ -29,7 +29,7 @@ class CDTime:
         设置CD时间
         """
         name = matcher.state["_prefix"]["command"][0]
-        cd = await ju.get_val("data/cd.json", [name, event.user_id])
+        cd = await ju.get_val("data/cd.json", [name, str(event.user_id)])
         cool_time = cfg["base"]["default_cooldown_time"]
 
         if use_config:
@@ -40,7 +40,7 @@ class CDTime:
                 cdtime = cool_time[1]["global"]
 
         if not cd:
-            await ju.update_or_create_val("data/cd.json", [name, event.user_id], int(time.time()) + cdtime)
+            await ju.update_or_create_val("data/cd.json", [name, str(event.user_id)], int(time.time()) + cdtime)
 
     @classmethod
     async def is_cd_down(cls,
@@ -60,7 +60,7 @@ class CDTime:
                 return True
 
         name = matcher.state["_prefix"]["command"][0]
-        cd = await ju.get_val("data/cd.json", [name, event.user_id])
+        cd = await ju.get_val("data/cd.json", [name, str(event.user_id)])
         if not cd:
             if need_reset: await CDTime.set_cd_time(matcher, event)
             return True
@@ -79,7 +79,7 @@ class CDTime:
         获取CD时间
         """
         name = matcher.state["_prefix"]["command"][0]
-        cd = await ju.get_val("data/cd.json", [name, event.user_id])
+        cd = await ju.get_val("data/cd.json", [name, str(event.user_id)])
         if not cd:
             return -1
         else:
