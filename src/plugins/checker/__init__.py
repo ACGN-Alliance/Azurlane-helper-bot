@@ -1,6 +1,4 @@
-from src.plugins.config import cfg
 from src.plugins.equip import tmp_dir
-from src.plugins.server_status.if_on import push_msg
 
 from .rule_check import *
 from .start_checker import *

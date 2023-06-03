@@ -1,6 +1,6 @@
 from typing import Annotated
 from httpx import get
-import time
+import time, nonebot
 
 from nonebot.adapters.onebot.v11 import Bot, Message, GroupMessageEvent, MessageEvent
 from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
@@ -8,6 +8,7 @@ from nonebot import on_command
 from nonebot.matcher import Matcher
 from nonebot.params import CommandArg
 from nonebot.permission import SUPERUSER
+from nonebot.log import logger
 
 from src.plugins.config import cfg
 from src.plugins.json_utils import JsonUtils as ju
@@ -107,6 +108,10 @@ async def push_msg(bot: Bot):
             elif v["type"] == "private":
                 await send_forward_msg_type(bot=bot, type="private", name="服务器状态", uid=int(id_), msgs=msg)
 
+async def check():
+    (bot,) = nonebot.get_bots().values()
+    await push_msg(bot)
+    logger.info(f"[自动检查]已检查服务器状态")
 
 monitor = on_command("服务器状态监测", priority=5, rule=event_handle, permission=SUPERUSER | GROUP_ADMIN | GROUP_OWNER)
 @monitor.handle()
