@@ -5,7 +5,7 @@ from nonebot import get_driver
 from nonebot.log import default_format
 
 from src.plugins.sync.operation import *
-from src.plugins.server_status.utils import check
+from src.plugins.server_status.uti import check
 from src.plugins.config import cfg
 from nonebot_plugin_apscheduler import scheduler
 

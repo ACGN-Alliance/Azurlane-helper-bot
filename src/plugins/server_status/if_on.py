@@ -11,7 +11,7 @@ from nonebot.permission import SUPERUSER
 from src.plugins.config import cfg
 from src.plugins.json_utils import JsonUtils as ju
 from src.plugins.checker.rule_check import event_handle
-from .utils import get_server_state
+from .uti import get_server_state
 
 data_dir = "./data/server/server_status.json"
 user_data_dir = "./data/server/server_status_user.json"
