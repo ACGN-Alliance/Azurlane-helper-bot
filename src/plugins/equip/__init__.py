@@ -31,9 +31,8 @@ from nonebot.matcher import Matcher
 from src.plugins.checker.rule_check import event_handle
 from src.plugins.config import cfg
 from src.plugins.utils import CDTime as cd
-from .render import EquipAttr, tmp_dir
+from .render import EquipAttr, tmp_dir, data_dir
 
-data_dir = "data/azurlane/equip/"
 def render_img(name: str):
     equip_data = json.load(open(data_dir + name + ".json", "r", encoding="utf-8"))
     io = BytesIO()
