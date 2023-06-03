@@ -302,8 +302,8 @@ def image(im: T_Image) -> Image.Image:
         from src.plugins.config import cfg
         proxy = cfg["base"]["network_proxy"]
         io = BytesIO()
-        if isinstance(im, str):
-            im = im.encode()
+        # if isinstance(im, str):
+        #     im = im.encode()
         if proxy:
             io.write(
                 httpx.get(im, proxies=proxy).content
