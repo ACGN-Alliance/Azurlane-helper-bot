@@ -47,6 +47,15 @@ base:
   # 注意：为防止网络因素等影响，建议设置在5分钟以上
   # 即使设置了时间仍需要手动开启自动更新才会生效
   auto_update_time: -1
+  # 默认冷却时间
+  # 单位：秒
+  # 优先级：func > global
+  # 可以在func下设置单独的冷却时间
+  # 格式： 功能名: 冷却时间
+  default_cooldown_time:
+    - func:
+        test: 10
+    - global: 60
 
 bili:
   # 动态自动推送间隔时间

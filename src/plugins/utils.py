@@ -12,38 +12,62 @@ from typing import List
 import time
 
 from src.plugins.json_utils import JsonUtils as ju
+from src.plugins.config import cfg
 
 class CDTime:
     @classmethod
-    async def set_cd_time(cls, matcher: Matcher, event: MessageEvent, *args, cdtime: int = 60):
+    async def set_cd_time(cls,
+                          matcher: Matcher,
+                          event: MessageEvent,
+                          *args,
+                          cdtime: int = 60,
+                          use_config: bool = True
+                    ):
         """
         设置CD时间
         """
         name = matcher.state["_prefix"]["command"][0]
         cd = await ju.get_val("data/cd.json", [name. event.user_id])
+        cool_time = cfg["base"]["default_cooldown_time"][0]["func"]
+
+        if use_config:
+            # 获取自定义冷却时间
+            if cool_time.get("name"):
+                cdtime = cool_time["name"]
+            else:
+                cdtime = cool_time["global"]
+
         if not cd:
             await ju.update_or_create_val("data/cd.json", [name, event.user_id], int(time.time()) + cdtime)
 
     @classmethod
-    async def is_cd_down(cls, matcher: Matcher, event: MessageEvent, *args, need_reset: bool = True) -> bool:
+    async def is_cd_down(cls,
+                         matcher:
+                         Matcher,
+                         event: MessageEvent,
+                         *args,
+                         need_reset: bool = True,
+                         cdtime: int = 60
+                    ) -> bool:
         """
         判断CD时间是否到了
         """
         name = matcher.state["_prefix"]["command"][0]
         cd = await ju.get_val("data/cd.json", [name, event.user_id])
         if not cd:
-            if need_reset:
-                await ju.update_or_create_val("data/cd.json", [name, event.user_id], int(time.time()) + 60)
+            if need_reset: await CDTime.set_cd_time(matcher, event)
             return True
         elif cd < int(time.time()):
-            if need_reset:
-                await ju.update_or_create_val("data/cd.json", [name, event.user_id], int(time.time()) + 60)
+            if need_reset: await CDTime.set_cd_time(matcher, event)
             return True
         else:
             return False
 
     @classmethod
-    async def get_cd_time(cls, matcher: Matcher, event: MessageEvent, *args) -> int:
+    async def get_cd_time(cls,
+                          matcher: Matcher,
+                          event: MessageEvent,
+                          *args) -> int:
         """
         获取CD时间
         """

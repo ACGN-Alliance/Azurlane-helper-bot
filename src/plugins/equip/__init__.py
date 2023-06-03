@@ -34,11 +34,13 @@ from src.plugins.config import cfg
 from src.plugins.utils import CDTime as cd
 from .render import EquipAttr
 
-
 data_dir = "data/azurlane/equip/"
-if not cfg["func"]["equip_tmp_dir"]: tmp_dir = data_dir + "tmp/"
-else: tmp_dir = cfg["func"]["equip_tmp_dir"]
+if not cfg["func"]["equip_tmp_dir"]:
+    tmp_dir = data_dir + "tmp/"
+else:
+    tmp_dir = cfg["func"]["equip_tmp_dir"]
 if not os.path.exists(tmp_dir): os.makedirs(tmp_dir)
+
 
 def render_img(name: str):
     equip_data = json.load(open(data_dir + name + ".json", "r", encoding="utf-8"))
@@ -47,7 +49,10 @@ def render_img(name: str):
     img = io.read()
     return img
 
+
 equip_info = on_command(cmd="装备查询", aliases={"eqif"}, rule=event_handle)
+
+
 @equip_info.handle()
 async def _(matcher: Matcher, event: MessageEvent, arg: Annotated[Message, CommandArg()]):
     if await cd.is_cd_down(matcher, event, need_reset=True):
