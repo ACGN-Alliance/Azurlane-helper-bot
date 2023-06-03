@@ -1,12 +1,9 @@
-# import httpx, base64, json, os
-# from nonebot.log import logger
-# from nonebot import get_driver
-#
-# from src.plugins.exception import RemoteFileNotExistsException
-# from src.plugins.config import cfg
-# from src.plugins.json_utils import JsonUtils as ju
-#
-# driver = get_driver()
+import json, os
+from nonebot import get_driver
+
+from src.plugins.json_utils import JsonUtils as ju
+
+driver = get_driver()
 #
 # class GithubHook(object):
 #     github_source_prefix = "https://api.github.com/repositories/578098474/contents/"
@@ -95,33 +92,31 @@
 #                 raise Exception(f"写入文件时出错, 错误原因:{e}")
 #             return content.decode("utf-8")
 #
-# async def data_sync():
-#     is_need_inited = False
-#     data_path_lst = ["data/azurlane", "data/word_bank", "data/bili", "data/equip"]
-#     for path in data_path_lst:
-#         if not os.path.exists(path):
-#             os.makedirs(path)
-#             is_need_inited = True
-#
-#     data_file = [
-#                 "data/group.json",
-#                 "data/user.json",
-#                 "data/group_cmd.json",
-#                 "data/group_func.json",
-#                 "data/config.json",
-#                 "data/bili/latest.json"
-#                 ]
-#     init_val = [
-#         {},
-#         {
-#             "global": []
-#         }
-#     ]
-#     await ju.init_many_jsons(data_file, init_val=init_val)
-#     for file in data_file:
-#         if not os.path.exists(file):
-#             with open(file, "w", encoding="utf-8") as f:
-#                 f.write(json.dumps({}))
+async def data_sync():
+    data_path_lst = ["data/azurlane", "data/word_bank", "data/bili", "data/equip"]
+    for path in data_path_lst:
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+    data_file = [
+                "data/group.json",
+                "data/user.json",
+                "data/group_cmd.json",
+                "data/group_func.json",
+                "data/config.json",
+                "data/bili/latest.json"
+                ]
+    init_val = [
+        {},
+        {
+            "global": []
+        }
+    ]
+    await ju.init_many_jsons(data_file, init_val=init_val)
+    for file in data_file:
+        if not os.path.exists(file):
+            with open(file, "w", encoding="utf-8") as f:
+                f.write(json.dumps({}))
 #
 #
 #

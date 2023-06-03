@@ -2,7 +2,7 @@ import os.path, sys
 
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot import get_driver
-from nonebot.log import logger
+from nonebot.log import logger, default_format
 from src.plugins.sync.operation import *
 
 # from src.plugins.base.sync import data_sync
@@ -17,6 +17,7 @@ async def _(bot: Bot):
 
 @driver.on_startup
 async def init():
+    logger.add("error.log", level="ERROR", format=default_format)
     # 文件检查
     proxy = cfg["base"]["network_proxy"]
     if proxy:
@@ -30,6 +31,7 @@ async def init():
         sys.exit(0)
 
     if cfg["base"]["startup_update"]:
+        await local_file_check()
         await sync_repo()
     else:
         logger.info("config.yaml中\"startup_update\"选项已关闭, 将不会更新数据")

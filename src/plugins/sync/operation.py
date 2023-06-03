@@ -1,6 +1,8 @@
-from git import Repo, RefLogEntry, GitConfigParser
-import os, sys
+from git import Repo
+import os, sys, json
 from subprocess import Popen, DEVNULL, call, PIPE
+
+from src.plugins.json_utils import JsonUtils as ju
 
 from nonebot import logger
 
@@ -73,3 +75,29 @@ async def sync_repo():
         except Exception as e:
             logger.error(f"克隆数据仓库失败: {e}")
             raise e
+
+async def local_file_check():
+    data_path_lst = ["data/azurlane", "data/word_bank", "data/bili", "data/equip"]
+    for path in data_path_lst:
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+    data_file = [
+        "data/group.json",
+        "data/user.json",
+        "data/group_cmd.json",
+        "data/group_func.json",
+        "data/config.json",
+        "data/bili/latest.json"
+    ]
+    init_val = [
+        {},
+        {
+            "global": []
+        }
+    ]
+    await ju.init_many_jsons(data_file, init_val=init_val)
+    for file in data_file:
+        if not os.path.exists(file):
+            with open(file, "w", encoding="utf-8") as f:
+                f.write(json.dumps({}))
