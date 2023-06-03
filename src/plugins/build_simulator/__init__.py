@@ -4,13 +4,15 @@
 @Author         : mrslouzk
 @Date           : 2023/3/5
 @LastEditors    : mrslouzk
-@LastEditTime   : 2023/4/9
+@LastEditTime   : 2023/6/3
 @Description    : 大建模拟器
 @GitHub         : https://github.com/MRSlouzk
 """
 __author__ = "mrslouzk"
 __usage__ = "https://acgn-alliance.github.io/AZbot-docs/#/usage/utility/%E6%A8%A1%E6%8B%9F%E5%BB%BA%E9%80%A0"
 __version__ = "0.0.2"
+
+# TODO 功能冷却系统
 
 from nonebot.adapters.onebot.v11 import (
     MessageSegment,
@@ -20,16 +22,20 @@ from nonebot.adapters.onebot.v11 import (
 )
 from nonebot import on_command
 from nonebot.params import CommandArg
+from nonebot.matcher import Matcher
+
 from typing import Annotated
 
 from src.plugins.checker.rule_check import event_handle
 from src.plugins.utils import send_forward_msg
-
+from src.plugins.utils import CDTime as cd
 from .simulator import build_simulator
 
 bsm = on_command("模拟建造", rule=event_handle)
 @bsm.handle()
-async def build_sim(bot: Bot, event: MessageEvent, arg: Annotated[Message, CommandArg()]):
+async def build_sim(bot: Bot, event: MessageEvent, matcher: Matcher, arg: Annotated[Message, CommandArg()]):
+    if await cd.is_cd_down(matcher, event, need_reset=True):
+        await bsm.finish("功能冷却中...")
     build_type = ["qx", "zx", "tx", "xd"]
     args = arg.extract_plain_text().split(" ")
     if len(args) == 0:

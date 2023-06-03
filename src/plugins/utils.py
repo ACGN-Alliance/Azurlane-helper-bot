@@ -6,8 +6,53 @@ from nonebot.adapters.onebot.v11 import (Message,
                                          MessageEvent,
                                          GROUP_ADMIN,
                                          GROUP_OWNER)
+from nonebot.matcher import Matcher
 from nonebot.exception import ActionFailed
 from typing import List
+import time
+
+from src.plugins.json_utils import JsonUtils as ju
+
+class CDTime:
+    @classmethod
+    async def set_cd_time(cls, matcher: Matcher, event: MessageEvent, *args, cdtime: int = 60):
+        """
+        设置CD时间
+        """
+        name = matcher.state["_prefix"]["command"][0]
+        cd = await ju.get_val("data/cd.json", [name. event.user_id])
+        if not cd:
+            await ju.update_or_create_val("data/cd.json", [name, event.user_id], int(time.time()) + cdtime)
+
+    @classmethod
+    async def is_cd_down(cls, matcher: Matcher, event: MessageEvent, *args, need_reset: bool = True) -> bool:
+        """
+        判断CD时间是否到了
+        """
+        name = matcher.state["_prefix"]["command"][0]
+        cd = await ju.get_val("data/cd.json", [name, event.user_id])
+        if not cd:
+            if need_reset:
+                await ju.update_or_create_val("data/cd.json", [name, event.user_id], int(time.time()) + 60)
+            return True
+        elif cd < int(time.time()):
+            if need_reset:
+                await ju.update_or_create_val("data/cd.json", [name, event.user_id], int(time.time()) + 60)
+            return True
+        else:
+            return False
+
+    @classmethod
+    async def get_cd_time(cls, matcher: Matcher, event: MessageEvent, *args) -> int:
+        """
+        获取CD时间
+        """
+        name = matcher.state["_prefix"]["command"][0]
+        cd = await ju.get_val("data/cd.json", [name, event.user_id])
+        if not cd:
+            return -1
+        else:
+            return cd - int(time.time())
 
 async def send_forward_msg_type(
         bot: Bot,

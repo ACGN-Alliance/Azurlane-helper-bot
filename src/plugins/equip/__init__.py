@@ -24,12 +24,14 @@ from io import BytesIO
 
 from nonebot import on_command
 from nonebot.adapters.onebot.v11 import (
-    Bot, Event, MessageSegment, Message, GroupMessageEvent
+    MessageSegment, Message, MessageEvent
 )
 from nonebot.params import CommandArg
+from nonebot.matcher import Matcher
 
 from src.plugins.checker.rule_check import event_handle
 from src.plugins.config import cfg
+from src.plugins.utils import CDTime as cd
 from .render import EquipAttr
 
 
@@ -47,7 +49,9 @@ def render_img(name: str):
 
 equip_info = on_command(cmd="装备查询", aliases={"eqif"}, rule=event_handle)
 @equip_info.handle()
-async def _(arg: Annotated[Message, CommandArg()]):
+async def _(matcher: Matcher, event: MessageEvent, arg: Annotated[Message, CommandArg()]):
+    if await cd.is_cd_down(matcher, event, need_reset=True):
+        await equip_info.finish("功能冷却中...")
     args = arg.extract_plain_text().split("")
     if len(args) != 1:
         await equip_info.finish(__usage__)

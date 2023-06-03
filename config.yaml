@@ -68,13 +68,13 @@ func:
   # 单位: 小时
   # -1为关闭自动清理
   equip_render_auto_clean: -1
+  # 图片源地址
+  # 若为本地文件，直接写地址，无需加file:///
+  image_path: "https://raw.githubusercontent.com/DK09/blhx-wiki/master/image"
   # 模拟建造输出消息模式
   # 可选：image(暂不可用，将在未来加入), forward。
   # image为图片模式，forward为合并转发模式
   build_output_mode: "forward"
-  # 图片源地址
-  # 若为本地文件，直接写地址，无需加file:///
-  image_path: "https://raw.githubusercontent.com/DK09/blhx-wiki/master/image"
   # 服务器状态监测刷新间隔
   # 单位：秒
   server_status_monitor_refresh_time: 60
