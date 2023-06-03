@@ -10,19 +10,23 @@ from nonebot.adapters.onebot.v11 import (MessageEvent,
 import json
 
 from src.plugins.config import black_list
+from src.plugins.sync.operation import local_file_check
 
 async def event_handle(event: Event, bot: Bot, state: T_State) -> bool:
     """
     事件处理器
 
     """
-    def user_check(user_id: int) -> bool:
+    async def user_check(user_id: int) -> bool:
         if user_id in black_list:
             return False
-        text_ = json.load(open("data/user.json", "r", encoding="utf-8"))
         try:
+            text_ = json.load(open("data/user.json", "r", encoding="utf-8"))
             cmd_ = state["_prefix"]["command"][0]
         except TypeError:
+            return False
+        except FileNotFoundError:
+            await local_file_check()
             return False
         if text_.get(cmd_) is None:
             text_.update({cmd_: []})
@@ -36,21 +40,28 @@ async def event_handle(event: Event, bot: Bot, state: T_State) -> bool:
             return False
 
     if isinstance(event, GroupMessageEvent):
-        text = json.load(open("data/group.json", "r", encoding="utf-8"))
         try:
+            text = json.load(open("data/group.json", "r", encoding="utf-8"))
             cmd = state["_prefix"]["command"][0]
         except TypeError:
             return False
+        except FileNotFoundError:
+            await local_file_check()
+            return False
         if text.get(cmd) is None:
             text.update({cmd: []})
-            open("data/group.json", "w", encoding="utf-8").write(json.dumps(text))
-            if(user_check(event.user_id)):
+            try:
+                open("data/group.json", "w", encoding="utf-8").write(json.dumps(text))
+            except FileNotFoundError:
+                await local_file_check()
+                return False
+            if(await user_check(event.user_id)):
                 return True
             else:
                 await bot.send_group_msg(group_id=event.group_id, message="您没有权限使用此命令")
                 return False
         if event.group_id not in text[cmd]:
-            if(user_check(event.user_id)):
+            if(await user_check(event.user_id)):
                 return True
             else:
                 await bot.send_group_msg(group_id=event.group_id, message="您没有权限使用此命令")
@@ -59,7 +70,7 @@ async def event_handle(event: Event, bot: Bot, state: T_State) -> bool:
             await bot.send_group_msg(group_id=event.group_id, message="本群没有权限使用此命令")
             return False
     elif(isinstance(event, PrivateMessageEvent)):
-        if user_check(event.user_id):
+        if (await user_check(event.user_id)):
             return True
         else:
             await bot.send_private_msg(user_id=event.user_id, message="您没有权限使用此命令")
@@ -78,7 +89,11 @@ async def _if_exist_func(data: dict, file: str, key: str):
 
 async def notice_handle(event: NoticeEvent):
     if(isinstance(event, GroupIncreaseNoticeEvent)):
-        text = json.load(open("data/group_func.json", "r", encoding="utf-8"))
+        try:
+            text = json.load(open("data/group_func.json", "r", encoding="utf-8"))
+        except FileNotFoundError:
+            await local_file_check()
+            return False
         _if = await _if_exist_func(text, "data/group_func.json", "group_welcome")
         if not _if: return False
         if(event.group_id in text["group_welcome"]): return True
@@ -88,14 +103,22 @@ async def notice_handle(event: NoticeEvent):
 
 async def chat_handle(event: MessageEvent):
     if(not isinstance(event, GroupMessageEvent)): return False
-    text = json.load(open("data/group_func.json", "r", encoding="utf-8"))
+    try:
+        text = json.load(open("data/group_func.json", "r", encoding="utf-8"))
+    except FileNotFoundError:
+        await local_file_check()
+        return False
     _if = await _if_exist_func(text, "data/group_func.json", "group_chat")
     if not _if: return False
     if(event.group_id in text["group_chat"]): return True
     else: return False
 
 async def bili_handle(event: GroupMessageEvent):
-    text = json.load(open("data/group_func.json", "r", encoding="utf-8"))
+    try:
+        text = json.load(open("data/group_func.json", "r", encoding="utf-8"))
+    except FileNotFoundError:
+        await local_file_check()
+        return False
     _if = await _if_exist_func(text, "data/group_func.json", "bili")
     if not _if: return False
     if(event.group_id in text["bili"]): return True

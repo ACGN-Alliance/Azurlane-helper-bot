@@ -54,7 +54,7 @@ equip_info = on_command(cmd="装备查询", aliases={"eqif"}, rule=event_handle)
 
 
 @equip_info.handle()
-async def _(bot: Bot, matcher: Matcher, event: MessageEvent, arg: Annotated[Message, CommandArg()]):
+async def _(bot: Bot, matcher: Matcher, event: MessageEvent, arg: Message = CommandArg()):
     if await cd.is_cd_down(matcher, event, bot, need_reset=True):
         await equip_info.finish("功能冷却中...")
     args = arg.extract_plain_text().split("")

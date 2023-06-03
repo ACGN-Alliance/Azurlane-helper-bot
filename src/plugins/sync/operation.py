@@ -2,7 +2,7 @@ from git import Repo
 import os, sys, json
 from subprocess import Popen, DEVNULL, call, PIPE
 
-from src.plugins.json_utils import JsonUtils as ju
+# from src.plugins.json_utils import JsonUtils as ju
 
 from nonebot import logger
 
@@ -90,7 +90,7 @@ async def local_file_check():
         "data/config.json",
         "data/bili/latest.json"
     ]
-    await ju.init_many_jsons(data_file, init_val=init_val)
+    # await ju.init_many_jsons(data_file, init_val=init_val)
     for file in data_file:
         if not os.path.exists(file):
             with open(file, "w", encoding="utf-8") as f:

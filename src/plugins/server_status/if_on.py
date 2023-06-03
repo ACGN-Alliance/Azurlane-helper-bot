@@ -110,7 +110,7 @@ async def push_msg(bot: Bot):
 
 monitor = on_command("服务器状态监测", priority=5, rule=event_handle, permission=SUPERUSER | GROUP_ADMIN | GROUP_OWNER)
 @monitor.handle()
-async def _(matcher: Matcher, event: MessageEvent, arg: Annotated[Message, CommandArg()]):
+async def _(matcher: Matcher, event: MessageEvent, arg: Message = CommandArg()):
     async def turn_on(matcher_: Matcher, *args, server_name_=None):
         if server_name_ is None:
             server_name_ = all_available_server_name
