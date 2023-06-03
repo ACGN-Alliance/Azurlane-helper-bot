@@ -2,7 +2,7 @@ from src.render import Frame, Text, Border
 from src.plugins.config import cfg
 import os
 
-data_dir = "data/azurlane/equip/"
+data_dir = "data/remote/azurlane/equip/"
 if not cfg["func"]["equip_tmp_dir"]:
     tmp_dir = data_dir + "tmp/"
 else:

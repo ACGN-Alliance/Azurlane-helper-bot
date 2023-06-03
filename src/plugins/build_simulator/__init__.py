@@ -34,10 +34,10 @@ from .simulator import build_simulator
 bsm = on_command("模拟建造", rule=event_handle)
 @bsm.handle()
 async def build_sim(bot: Bot, event: MessageEvent, matcher: Matcher, arg: Message = CommandArg()):
-    if not await cd.is_cd_down(matcher, event, bot, need_reset=True):
+    if not await cd.is_cd_down(matcher, event, bot, need_reset=False):
         await bsm.finish("功能冷却中...")
     build_type = ["qx", "zx", "tx", "xd"]
-    args = arg.extract_plain_text().split(" ")
+    args = arg.extract_plain_text().split()
     if len(args) == 0:
         await bsm.finish("请输入建造池类型")
     elif len(args) == 1:
@@ -70,3 +70,4 @@ async def build_sim(bot: Bot, event: MessageEvent, matcher: Matcher, arg: Messag
             await bsm.finish("获取舰船图标失败, 取消本次抽取")
         msg_lst.append(msg)
     await send_forward_msg(bot, event, "建造模拟器", str(bot.self_id), msg_lst)
+    await cd.set_cd_time(matcher, event, bot)
