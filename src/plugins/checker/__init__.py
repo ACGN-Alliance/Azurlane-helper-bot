@@ -1,4 +1,4 @@
-from src.plugins.equip import tmp_dir
+from src.plugins.equip.render import tmp_dir
 
 from .rule_check import *
 from .start_checker import *

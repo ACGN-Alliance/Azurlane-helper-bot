@@ -19,7 +19,6 @@ __version__ = "0.0.3"
 
 import json
 import os
-from typing import Annotated
 from io import BytesIO
 
 from nonebot import on_command
@@ -32,16 +31,9 @@ from nonebot.matcher import Matcher
 from src.plugins.checker.rule_check import event_handle
 from src.plugins.config import cfg
 from src.plugins.utils import CDTime as cd
-from .render import EquipAttr
+from .render import EquipAttr, tmp_dir
 
 data_dir = "data/azurlane/equip/"
-if not cfg["func"]["equip_tmp_dir"]:
-    tmp_dir = data_dir + "tmp/"
-else:
-    tmp_dir = cfg["func"]["equip_tmp_dir"]
-if not os.path.exists(tmp_dir): os.makedirs(tmp_dir)
-
-
 def render_img(name: str):
     equip_data = json.load(open(data_dir + name + ".json", "r", encoding="utf-8"))
     io = BytesIO()

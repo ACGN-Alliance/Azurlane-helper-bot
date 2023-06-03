@@ -1,5 +1,12 @@
 from src.render import Frame, Text, Border
 from src.plugins.config import cfg
+import os
+
+if not cfg["func"]["equip_tmp_dir"]:
+    tmp_dir = data_dir + "tmp/"
+else:
+    tmp_dir = cfg["func"]["equip_tmp_dir"]
+if not os.path.exists(tmp_dir): os.makedirs(tmp_dir)
 
 IMAGE_PATH = cfg["func"]["image_path"]
 
