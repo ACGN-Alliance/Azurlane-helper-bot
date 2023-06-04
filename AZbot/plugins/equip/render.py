@@ -4,10 +4,11 @@ import os
 
 data_dir = "data/remote/azurlane/equip/"
 if not cfg["func"]["equip_tmp_dir"]:
-    tmp_dir = data_dir + "tmp/"
+    tmp_dir = "data/equip_tmp/"
 else:
     tmp_dir = cfg["func"]["equip_tmp_dir"]
-if not os.path.exists(tmp_dir): os.makedirs(tmp_dir)
+if not os.path.exists(tmp_dir):
+    os.makedirs(tmp_dir)
 
 IMAGE_PATH = cfg["func"]["image_path"]
 
@@ -95,15 +96,15 @@ class EquipAttr(Frame):
             background=(67, 67, 67)
         ))
         # rarity
-        self.append(f"{IMAGE_PATH}/icon/equip/level_{data['rarity'] + 1}.png")
+        self.append(os.path.join(IMAGE_PATH, "icon", "equip", f"level_{data['rarity'] + 1}.png"))
         # icon
         self.append(
-            f"{IMAGE_PATH}/equip/{data['name'].replace('/', '_')}.png",
+            os.path.join(IMAGE_PATH, "icon", "equip", f"{data['name'].replace('/', '_')}.png"),
             ((self.width - 128) // 2, self.height - 175), (128, 128)
         )
         # level
         self.append(
-            f"{IMAGE_PATH}/icon/equip/{data['level']}.png",
+            os.path.join(IMAGE_PATH, "icon", "equip", f"{data['level']}.png"),
             (512, self.height - 196), (32, 45)
         )
         # type

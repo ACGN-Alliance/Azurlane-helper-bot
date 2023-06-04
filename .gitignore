@@ -145,5 +145,7 @@ test/
 gocq/
 bili/
 bot.py
+error.log
+error.log.bak
 
 # End of https://www.toptal.com/developers/gitignore/api/python.pdm-python

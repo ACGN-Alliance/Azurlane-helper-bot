@@ -27,6 +27,7 @@ from nonebot.adapters.onebot.v11 import (
 )
 from nonebot.params import CommandArg
 from nonebot.matcher import Matcher
+from nonebot_plugin_apscheduler import scheduler
 
 from AZbot.plugins.checker.rule_check import event_handle
 from AZbot.plugins.config import cfg
@@ -66,8 +67,15 @@ async def _(bot: Bot, matcher: Matcher, event: MessageEvent, arg: Message = Comm
                 img = render_img(str(arg[0]))
                 msg = MessageSegment.image(img)
                 open(tmp_dir + args[0] + ".png", "wb").write(img)
+            if "equip_clean" not in [job.id for job in scheduler.get_jobs("default")]:
+                if cfg["func"]["equip_render_auto_clean"] != -1:
+                    scheduler.add_job(auto_clean, trigger="interval", hours=cfg["func"]["equip_render_auto_clean"], id="equip_clean")
         else:
             msg = Message("装备渲染模式配置错误, 请联系管理员")
 
         await cd.set_cd_time(matcher, event, bot)
         await equip_info.finish(msg)
+
+async def auto_clean():
+    for file in os.listdir(tmp_dir):
+        os.remove(tmp_dir + file)

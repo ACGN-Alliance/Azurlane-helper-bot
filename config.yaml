@@ -10,12 +10,11 @@ user:
   # TODO 功能转移至中控群
   super_admin:
     - 3237231778
-    - 987654321
+    - 0
   # 黑名单QQ号
   # 可填写多个，填0则没有
   black_list:
-    - 123456789
-    - 987654321
+    - 0
   # 是否接收入群申请
   can_invited_to_group: false
   # 是否接收好友申请
@@ -30,18 +29,16 @@ base:
   # 代理地址
   # 如需使用代理请填写代理地址，否则请留空
   # exp: http://127.0.0.1:7890
-  network_proxy: ""
+  network_proxy: "http://127.0.0.1:7890"
+  # git代理修改
+  # global为全局代理（推荐），local为仅修改本仓库代理，none为不修改代理
+  git_proxy: "global"
   # 是否在启动时私聊发送通知
   startup_notify: false
   # 是否在启动时更新数据
   # false仅供调试使用，正常使用请设置为true！
   # ！！！注意：第一次启动若未设置为false,则运行时会报错！！！
-  startup_update: false
-  # 下载数据源
-  # 可选项：github, gitee, jsdelivr(国内推荐)
-  # 注意：因为一些技术原因，即使选择了 gitee 和 jsdelivr ，部分数据也会从 github 下载
-  # 所以请尽量使用代理，否则可能会出现下载失败的情况
-  download_source: "github"
+  startup_update: true
   # 自动更新间隔
   # 单位：分钟
   # -1为关闭自动更新
@@ -80,7 +77,8 @@ func:
   equip_render_auto_clean: -1
   # 图片源地址
   # 若为本地文件，直接写地址，无需加file:///
-  image_path: "https://raw.githubusercontent.com/DK09/blhx-wiki/master/image"
+  # 通常不需要修改, 如果有可以设置自己的图片源
+  image_path: "data/remote/image"
   # 模拟建造输出消息模式
   # 可选：image(暂不可用，将在未来加入), forward。
   # image为图片模式，forward为合并转发模式
@@ -92,6 +90,10 @@ func:
 develop:
   # 是否开启调试模式
   debug: false
+  # 强制克隆数据仓库
+  # 数据同步出现bug时使用
+  # 如报错InvalidGitRepositoryError
+  force_clone_repo: false
   # 日志最大缓存大小
   # 单位：MB
   log_max_cache_size: 20

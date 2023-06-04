@@ -1,4 +1,5 @@
 import os.path
+import shutil
 
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot import get_driver
@@ -18,10 +19,13 @@ async def _(bot: Bot):
 
 @driver.on_startup
 async def init():
+    shutil.copyfile("error.log", "error.log.bak")
+    os.remove("error.log")
     logger.add("error.log", level="ERROR", format=default_format)
     # 文件检查
     proxy = cfg["base"]["network_proxy"]
-    if proxy:
+
+    if proxy and cfg["base"]["git_proxy"] != "none":
         set_proxy(proxy)
 
     if not (cfg.get("user") or cfg.get("user").get("super_admin")):
@@ -56,5 +60,3 @@ async def init():
         su += (str(user), )
     # TODO ccg群成员加入超管
     get_driver().config.superusers = su
-
-    print(get_driver().config.superusers)

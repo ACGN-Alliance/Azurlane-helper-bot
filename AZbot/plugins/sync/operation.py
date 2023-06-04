@@ -1,15 +1,15 @@
 from git import Repo
-import os, sys, json
+import os, sys, json, pathlib
 from subprocess import Popen, DEVNULL, call, PIPE
 
 # from AZbot.plugins.json_utils import JsonUtils as ju
+from AZbot.plugins.config import cfg
 
 from nonebot import logger
 
-# TODO 数据文件路径重写
-
 def set_proxy(url: str):
-    std = Popen("git config http.proxy", shell=True, stdout=PIPE, stderr=PIPE)
+    mode = cfg["base"]["git_proxy"]
+    std = Popen(f"git config --{mode} http.proxy", shell=True, stdout=PIPE, stderr=PIPE)
     if not std.returncode:
         out = std.stdout.read().decode("utf-8")
     else:
@@ -17,7 +17,7 @@ def set_proxy(url: str):
     if out.__eq__(url):
         return
     else:
-        Popen(f"git config http.proxy {url}", shell=True, stdout=DEVNULL)
+        Popen(f"git config --{mode} http.proxy {url}", shell=True, stdout=DEVNULL)
 
 def checkout_branch(
         name: str,
@@ -30,13 +30,10 @@ def checkout_branch(
         if len(branchs) == 0:
             raise Exception("未找到指定分支")
         branch = branchs[0]
-        # repo.head.reference = branchs[0]
-        # if not repo.head.is_detached:
-        #     repo.head.reset(index=True, working_tree=True)
-        repo.heads[branch.name].checkout(force=force)
+        repo.heads[branch.name].checkout(force=True)
     else:
         repo.create_head(name)
-        repo.heads[name].checkout(force=force)
+        repo.heads[name].checkout(force=True)
 
 def local_and_remote_ver():
     if os.path.exists("./data/remote"):
@@ -48,37 +45,42 @@ def local_and_remote_ver():
         return None, None
 
 def sync_repo():
-    if os.path.exists("./data/remote"):
-        repo = Repo("./data/remote")
-        checkout_branch("data", repo, force=True)
-        remote = [x for x in repo.remote().repo.heads if "data" in x.name][0]
-        try:
-            repo.remote().fetch(kill_after_timeout=20)
-            # logger.info("数据仓库远端同步完成")
-        except Exception as e:
-            logger.error(f"同步数据仓库失败: {e}")
-            raise e
-
-        (local_ver, remote_ver) = local_and_remote_ver()
-        if str(next(repo.iter_commits()))[:7] == str(next(remote.repo.iter_commits(remote.repo.heads[0].name)))[:7]:
-            logger.info(f"{local_ver}(local)={remote_ver}(remote), 数据仓库已是最新版本")
-            return None
-        else:
-            logger.info(f"数据仓库正在更新: {local_ver} -> {remote_ver}")
-            repo.remote().pull()
-            logger.info("数据仓库已更新")
-            return True
-
-    else:
-        os.makedirs("./data/remote")
-        logger.info("未检测到数据文件夹, 即将开始克隆数据仓库。若出现下载缓慢的情况，请在config.yml中配置代理")
-        try:
-            repo = Repo.clone_from("https://github.com/ACGN-Alliance/nonebot-plugin-azurlane-assistant-data", "./data/remote")
+    force = cfg["develop"]["force_clone_repo"]
+    path = pathlib.Path("./data/remote")
+    if path.is_dir() and not force:
+        if os.listdir(path) != 0:
+            repo = Repo("./data/remote")
             checkout_branch("data", repo, force=True)
-            return True
-        except Exception as e:
-            logger.error(f"克隆数据仓库失败: {e}")
-            raise e
+            remote = [x for x in repo.remote().repo.heads if "data" in x.name][0]
+            try:
+                repo.remote().fetch(kill_after_timeout=20)
+                # logger.info("数据仓库远端同步完成")
+            except Exception as e:
+                logger.error(f"同步数据仓库失败: {e}")
+                raise e
+
+            (local_ver, remote_ver) = local_and_remote_ver()
+            if str(next(repo.iter_commits()))[:7] == str(next(remote.repo.iter_commits(remote.repo.heads[0].name)))[:7]:
+                logger.info(f"{local_ver}(local) == {remote_ver}(remote), 数据仓库已是最新版本")
+                return None
+            else:
+                logger.info(f"数据仓库正在更新: {local_ver}(local) -> {remote_ver}(remote)")
+                repo.remote().pull()
+                logger.info("数据仓库已更新")
+                return True
+
+    if force:
+        import shutil
+        shutil.rmtree("./data/remote", ignore_errors=True)
+
+    logger.info("未检测到数据文件夹, 即将开始克隆数据仓库。若出现下载缓慢的情况，请在config.yml中配置代理")
+    try:
+        repo = Repo.clone_from("https://github.com/ACGN-Alliance/nonebot-plugin-azurlane-assistant-data", "./data/remote", branch="data", single_branch=True)
+        checkout_branch("data", repo, force=True)
+        return True
+    except Exception as e:
+        logger.error(f"克隆数据仓库失败: {e}")
+        raise e
 
 def local_file_check():
     data_path_lst = ["data/azurlane", "data/word_bank", "data/bili", "data/equip", "data/server"]
