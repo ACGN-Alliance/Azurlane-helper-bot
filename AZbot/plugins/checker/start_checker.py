@@ -2,7 +2,7 @@ import os.path
 import shutil
 
 from nonebot.adapters.onebot.v11 import Bot
-from nonebot import get_driver
+from nonebot import get_driver, get_bots
 from nonebot.log import default_format
 
 from AZbot.plugins.sync.operation import *
@@ -19,13 +19,14 @@ async def _(bot: Bot):
 
 @driver.on_startup
 async def init():
-    if os.path.exists("error.log"):
-        shutil.copyfile("error.log", "error.log.bak")
-        os.remove("error.log")
-    logger.add("error.log", level="ERROR", format=default_format)
-    # 文件检查
-    proxy = cfg["base"]["network_proxy"]
 
+    if cfg["develop"]["debug"]:
+        if os.path.exists("error.log"):
+            shutil.copyfile("error.log", "error.log.bak")
+            os.remove("error.log")
+        logger.add("error.log", level="ERROR", format=default_format)
+
+    proxy = cfg["base"]["network_proxy"]
     if proxy and cfg["base"]["git_proxy"] != "none":
         set_proxy(proxy)
 
@@ -57,7 +58,19 @@ async def init():
             scheduler.add_job(check, "interval", seconds=auto_check)
 
     su = ()
+    ccg = cfg["user"]["ccg"]
     for user in cfg["user"]["super_admin"]:
         su += (str(user), )
-    # TODO ccg群成员加入超管
+
+    if ccg != -1:
+        try:
+            (bot, ) = get_bots().values()
+            mem_lst = bot.call_api("get_group_member_list", group_id=ccg)
+            for mem in mem_lst:
+                if str(mem) in su:
+                    continue
+                su += (str(mem["user_id"]), )
+        except:
+            logger.error("无法获取ccg群成员列表, 请检查配置文件中ccg的值是否正确")
+
     get_driver().config.superusers = su

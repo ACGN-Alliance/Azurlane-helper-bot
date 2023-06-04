@@ -102,6 +102,7 @@ async def _(event: GroupMessageEvent):
     req = await JsonUtils.get_val("./data/invite.json", ["groups", event.group_id])
     if len(req) == 0:
         await group_approve_list.finish("目前没有未处理的加群申请~")
-
-    # TODO 未完成
-    # TODO 测试JsonUtils功能([]属性)
+    msg = Message("目前未处理的加群申请：\n")
+    for i in req:
+        msg += Message(f"{i}({req[i]['applicant']})\n")
+    await group_approve_list.send(msg)

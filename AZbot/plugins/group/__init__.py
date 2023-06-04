@@ -1,23 +1,41 @@
 from nonebot.adapters.onebot.v11 import (
     Bot,
     MessageEvent,
-    MessageSegment,
     GROUP_ADMIN,
     GROUP_OWNER,
-    GroupIncreaseNoticeEvent
+    GroupIncreaseNoticeEvent,
+    GroupMessageEvent
 )
-from nonebot import on_command, on_keyword, on_notice, on_message
+from nonebot import on_command, on_notice, on_message
+from nonebot.permission import SUPERUSER as SU
+from nonebot.typing import T_State
 
-from AZbot.plugins.checker.rule_check import event_handle, chat_handle, notice_handle
-# __version__ = "0.0.1-dev"
+from AZbot.plugins.checker.rule_check import chat_handle, notice_handle
+from AZbot.plugins.json_utils import JsonUtils as ju
 
 import re, json
 
 # 群事件监听
 wel = on_notice(rule=notice_handle)
 async def welcome(bot: Bot, event: GroupIncreaseNoticeEvent):
-    await bot.send_group_msg(group_id=event.group_id, message="欢迎新人入群~")
-    # TODO: 定制欢迎语
+    wel_msg = await ju.get_val("./data/welcome.json", [str(event.group_id)])
+    if not wel_msg:
+        wel_msg = "欢迎新人入群~"
+    await bot.send_group_msg(group_id=event.group_id, message=wel_msg)
+
+set_welcome = on_command("设置欢迎语", permission=GROUP_ADMIN | GROUP_OWNER | SU)
+
+@set_welcome.handle()
+async def _():
+    await set_welcome.send("接下来你输入的下一个消息将作为欢迎语，输入\"取消\"以取消操作（支持图片）")
+
+@set_welcome.got("group_id")
+async def _(event: GroupMessageEvent):
+    if event.get_plaintext() == "取消":
+        set_welcome.finish("操作已取消")
+    else:
+        msg = event.get_plaintext()
+        await ju.update_or_create_val("./data/welcome.json", [str(event.group_id)], msg)
 
 # 群消息监听
 msg = on_message(rule=chat_handle, priority=99)
@@ -33,10 +51,3 @@ async def _(bot: Bot, event: MessageEvent):
     r = re.compile(r"[CQ:at,qq={}]".format(bot.self_id))
     if(re.match(r, event.get_plaintext()) is not None):
         await msg.finish("你好~, 找我有什么事情呀")
-#
-# ver = on_command("版本")
-# @ver.handle()
-# async def _():
-#     data = json.load(open("data/git.json", "r", encoding="utf-8"))
-#     com = data["lastest_commit"]
-#     await ver.finish(f"当前版本: {__version__}\n数据版本: {com[:6]}")

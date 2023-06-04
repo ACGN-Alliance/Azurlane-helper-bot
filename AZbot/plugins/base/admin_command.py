@@ -10,8 +10,9 @@ from nonebot.adapters.onebot.v11 import MessageEvent, Bot, Message
 
 from AZbot.plugins.utils import send_forward_msg
 from AZbot.plugins.json_utils import JsonUtils as ju
+from AZbot.plugins.sync.operation import local_and_remote_ver
 
-from typing import List, Annotated
+from typing import List
 import json, asyncio
 
 __version__ = "0.0.1-dev"
@@ -141,9 +142,9 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, args: Message = Com
 ver = on_command("版本", permission=SUPERUSER)
 @ver.handle()
 async def _():
-    await ver.finish(f"当前版本：{__version__}")
+    await ver.finish(f"当前版本：{__version__}, 数据版本：{local_and_remote_ver()[0]}")
 
-su_list = on_command("su-list")
+su_list = on_command("su-list", permission=SUPERUSER)
 @su_list.handle()
 async def _():
     logger.info(get_driver().config.superusers)

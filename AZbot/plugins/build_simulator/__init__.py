@@ -12,8 +12,6 @@ __author__ = "mrslouzk"
 __usage__ = "https://acgn-alliance.github.io/AZbot-docs/#/usage/utility/%E6%A8%A1%E6%8B%9F%E5%BB%BA%E9%80%A0"
 __version__ = "0.0.2"
 
-# TODO 功能冷却系统
-
 from nonebot.adapters.onebot.v11 import (
     MessageSegment,
     Message,
