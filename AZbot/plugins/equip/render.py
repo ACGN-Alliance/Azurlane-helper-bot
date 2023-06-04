@@ -11,6 +11,8 @@ if not os.path.exists(tmp_dir):
     os.makedirs(tmp_dir)
 
 IMAGE_PATH = cfg["func"]["image_path"]
+if "http" not in IMAGE_PATH:
+    IMAGE_PATH = os.path.join(os.getcwd(), IMAGE_PATH)
 
 suit_types = [
     "驱逐",
@@ -52,8 +54,8 @@ class Attr(Frame):
 
         for depth, key, content in get_nodes(data["attrs"]):
             frame = Frame(
-                width=556 - depth*tab,
-                margin=Border(10, left=10 + depth*tab),
+                width=556 - depth * tab,
+                margin=Border(10, left=10 + depth * tab),
                 padding=Border(bottom=5),
                 background=(67, 67, 67)
             )
@@ -99,7 +101,7 @@ class EquipAttr(Frame):
         self.append(os.path.join(IMAGE_PATH, "icon", "equip", f"level_{data['rarity'] + 1}.png"))
         # icon
         self.append(
-            os.path.join(IMAGE_PATH, "icon", "equip", f"{data['name'].replace('/', '_')}.png"),
+            os.path.join(IMAGE_PATH, "equip", f"{data['name'].replace('/', '_')}.png"),
             ((self.width - 128) // 2, self.height - 175), (128, 128)
         )
         # level
@@ -134,7 +136,7 @@ class EquipAttr(Frame):
         for suit_type in data["suit_type"]:
             n = suit_types.index(suit_type)
             use.append(
-                f"{IMAGE_PATH}/icon/equip/use_{n+1}.png",
-                ((n % 5)*104 + 32, (n // 5)*48 + 14)
+                f"{IMAGE_PATH}/icon/equip/use_{n + 1}.png",
+                ((n % 5) * 104 + 32, (n // 5) * 48 + 14)
             )
         self.append(use)

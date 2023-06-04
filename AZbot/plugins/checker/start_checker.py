@@ -19,8 +19,9 @@ async def _(bot: Bot):
 
 @driver.on_startup
 async def init():
-    shutil.copyfile("error.log", "error.log.bak")
-    os.remove("error.log")
+    if os.path.exists("error.log"):
+        shutil.copyfile("error.log", "error.log.bak")
+        os.remove("error.log")
     logger.add("error.log", level="ERROR", format=default_format)
     # 文件检查
     proxy = cfg["base"]["network_proxy"]

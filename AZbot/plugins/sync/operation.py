@@ -57,12 +57,14 @@ def sync_repo():
                 # logger.info("数据仓库远端同步完成")
             except Exception as e:
                 logger.error(f"同步数据仓库失败: {e}")
+                if cfg["base"]["ignore_sync_error"]:
+                    return False
                 raise e
 
             (local_ver, remote_ver) = local_and_remote_ver()
             if str(next(repo.iter_commits()))[:7] == str(next(remote.repo.iter_commits(remote.repo.heads[0].name)))[:7]:
                 logger.info(f"{local_ver}(local) == {remote_ver}(remote), 数据仓库已是最新版本")
-                return None
+                return True
             else:
                 logger.info(f"数据仓库正在更新: {local_ver}(local) -> {remote_ver}(remote)")
                 repo.remote().pull()
