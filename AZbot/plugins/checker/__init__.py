@@ -4,12 +4,11 @@ from .rule_check import *
 from .start_checker import *
 
 import nonebot, os
-
 from nonebot.log import logger
 from nonebot_plugin_apscheduler import scheduler
 
 bili_interval = cfg["bili"]["auto_push_time"]
-if(not isinstance(bili_interval, int)):
+if not isinstance(bili_interval, int):
     pass
 else:
     if(bili_interval < 3 or bili_interval > 1440):
@@ -17,19 +16,19 @@ else:
     else:
         @scheduler.scheduled_job("interval", minutes=bili_interval)
         async def bili_notice():
-            from AZbot.plugins.bili.bili_article import bili_article_pic
-            from base64 import b64encode
-            res = await bili_article_pic()
-            if(res is None):
+            from AZbot.plugins.bili.bili_article import bili_pic
+            path = await bili_pic()
+            if(path is None):
                 return
-            cid = res[1]
-            img = f"base64://{b64encode(res[0]).decode()}"
             data = json.load(open("data/group_func.json", "r", encoding="utf-8"))
-            if(data.get("bili") is not None):
+            if hasattr(data, "bili"):
                 (bot, ) = nonebot.get_bots().values()
                 for group in data["bili"]:
-                    await bot.send_group_msg(group_id=group, message=f"碧蓝航线官方更新专栏({cid}):")
-                    await bot.send_group_msg(group_id=group, message=f"[CQ:image,file={img}]]")
+                    await bot.send_group_msg(group_id=group, message="[CQ:image,file=file:///" + path + "]")
+
+                ccg = cfg["user"]["ccg"]
+                if ccg != -1:
+                    await bot.send_group_msg(user_id=ccg, message="消息已推送至" + str(len(data["bili"])) + "个群")
 
 auto_clean = cfg["func"]["equip_render_auto_clean"]
 if(not isinstance(auto_clean, int)):

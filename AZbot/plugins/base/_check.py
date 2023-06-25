@@ -17,12 +17,16 @@ from nonebot.log import logger
 from nonebot.adapters.onebot.v11 import Message, MessageEvent, Bot, GroupMessageEvent
 from nonebot.permission import SUPERUSER
 from nonebot.exception import ActionFailed
-import os, httpx, asyncio
+import httpx, asyncio
 
 from AZbot.plugins.config import cfg
 from AZbot.plugins.utils import send_forward_msg
 
 self_check = on_command("自检", permission=SUPERUSER)
+self_check.__doc__ = """用于检测机器人是否可以正常运行
+使用方法:
+%自检
+"""
 async def _(bot: Bot, event: MessageEvent):
     (ccg, su, proxy, ) = cfg["user"]["ccg"], cfg["user"]["super_admin"][0], cfg["base"]["network_proxy"]
     if isinstance(event, GroupMessageEvent):

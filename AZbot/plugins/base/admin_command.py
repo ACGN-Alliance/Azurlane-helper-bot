@@ -24,6 +24,10 @@ __usage__ = Message(Message("黑名单功能: \n")
 + Message("4. 是否在黑名单: /黑名单 查询 [群/人] 号码 *功能名\n"))
 
 reboot = on_command("重启", permission=SUPERUSER)
+reboot.__doc__ = """重启bot(请确保启动的时候使用了--reload参数, 否则此功能无法正常使用)
+使用方法:
+%重启
+"""
 @reboot.handle()
 async def _():
     await reboot.finish("正在重启...(注意: 请确保之前是使用nb run --reload启动的bot，否则此功能无法正常使用)")
@@ -98,6 +102,14 @@ async def check_blacklist(type_: str, id_: str, func: str = "") -> List[Message]
     return banned_list
 
 blacklist = on_command("黑名单", permission=SUPERUSER)
+blacklist.__doc__ = """黑名单管理
+使用方法:
+%黑名单 添加 [群/人] 号码 *功能名
+%黑名单 删除 [群/人] 号码 *功能名
+%黑名单 清空
+%黑名单 查询 [群/人] 号码 *功能名
+"""
+
 @blacklist.handle()
 async def _(bot: Bot, event: MessageEvent, matcher: Matcher, args: Message = CommandArg()):
     arg = args.extract_plain_text().split()
@@ -140,11 +152,21 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, args: Message = Com
         await matcher.finish("参数错误")
 
 ver = on_command("版本", permission=SUPERUSER)
+ver.__doc__ = """查看当前版本
+使用方法:
+%版本
+"""
+
 @ver.handle()
 async def _():
     await ver.finish(f"当前版本：{__version__}, 数据版本：{local_and_remote_ver()[0]}")
 
 su_list = on_command("su-list", permission=SUPERUSER)
+su_list.__doc__ = """查看当前超级用户组
+使用方法:
+%su-list
+"""
+
 @su_list.handle()
 async def _():
     logger.info(get_driver().config.superusers)

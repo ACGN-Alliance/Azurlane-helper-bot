@@ -49,12 +49,12 @@ class CDTime:
                          bot: Bot,
                          *args,
                          cdtime: int = 60,
-                         need_reset: bool = True,
-                         ignore_admin: bool = False,
+                         need_reset: bool = True
                     ) -> bool:
         """
         判断CD时间是否到了
         """
+        ignore_admin = cfg["base"]["admin_ignore_cd"]
         if ignore_admin:
             if SUPERUSER(bot, event) or GROUP_ADMIN(bot, event) or GROUP_OWNER(bot, event):
                 return True

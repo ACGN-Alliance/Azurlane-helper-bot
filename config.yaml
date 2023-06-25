@@ -57,11 +57,13 @@ base:
     - func:
         test: 10
     - global: 60
+  # 冷却时间忽略管理员
+  admin_ignore_cd: false
 
 bili:
   # 动态自动推送间隔时间
   # 单位：分钟
-  auto_push_time: 30
+  auto_push_time: 10
 
 func:
   # 装备渲染模式

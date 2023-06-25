@@ -14,7 +14,7 @@ from AZbot.plugins.utils import is_in_group
 
 rq = on_request()
 
-__usage__ = '''
+__usage__ = '''群管系统
 用法: 
 /处理加群请求 num [1/0]
 1为同意，0为拒绝
@@ -70,6 +70,7 @@ async def _(bot: Bot, event: RequestEvent):
                 await bot.send_private_msg(user_id=int(user), message=msg)
 
 approve_group = on_command("处理加群请求", permission=GROUP_ADMIN, rule=is_in_group)
+approve_group.__doc__ = __usage__
 
 @approve_group.handle()
 async def _(bot: Bot, event: GroupMessageEvent,args: Message = CommandArg()):
