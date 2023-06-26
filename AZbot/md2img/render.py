@@ -195,8 +195,8 @@ class Render:
 
         if self.mode == "bili":  # 专栏风格样式
             self._add_frame(8, (137, 207, 240), y_pos=(50, 0))
-            self._add_img("bili.png", (0, self.img.height - 54), (88, 42))
-            self._add_img("azurlane.png", (self.img.width - 50, self.img.height - 46), (40, 40))
+            self._add_img("data/image/bili.png", (0, self.img.height - 54), (88, 42))
+            self._add_img("data/image/azurlane.png", (self.img.width - 50, self.img.height - 46), (40, 40))
 
             if hasattr(self, "info"):
                 font = ImageFont.truetype(self.font, 24, encoding="unic")
@@ -217,8 +217,8 @@ class Render:
                     )
         elif self.mode == "dynamic":  # 动态风格样式
             self._add_frame(8, (255, 192, 203), y_pos=(50, 0))
-            self._add_img("bili.png", (0, self.img.height - 54), (88, 42))
-            self._add_img("azurlane.png", (self.img.width - 50, self.img.height - 46), (40, 40))
+            self._add_img("data/image/bili.png", (0, self.img.height - 54), (88, 42))
+            self._add_img("data/image/azurlane.png", (self.img.width - 50, self.img.height - 46), (40, 40))
 
             if hasattr(self, "info"):
                 if self.info.get("time", None):
