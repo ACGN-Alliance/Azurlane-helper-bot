@@ -45,9 +45,9 @@ async def _(bot: Bot, event: MessageEvent):
     # 监测默认关键词并回复
     kw_lst = json.load(open("data/remote/work_bank/default.json", "r", encoding="utf-8"))
     for kw in kw_lst:
-        if(event.get_plaintext().find(kw) != -1):
+        if event.get_plaintext().find(kw) != -1:
             await msg.finish(kw_lst[kw])
 
     r = re.compile(r"[CQ:at,qq={}]".format(bot.self_id))
-    if(re.match(r, event.get_plaintext()) is not None):
+    if re.match(r, event.get_plaintext()):
         await msg.finish("你好~, 找我有什么事情呀")
