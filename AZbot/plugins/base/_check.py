@@ -27,6 +27,7 @@ self_check.__doc__ = """用于检测机器人是否可以正常运行
 使用方法:
 %自检
 """
+@self_check.handle()
 async def _(bot: Bot, event: MessageEvent):
     (ccg, su, proxy, ) = cfg["user"]["ccg"], cfg["user"]["super_admin"][0], cfg["base"]["network_proxy"]
     if isinstance(event, GroupMessageEvent):
@@ -34,7 +35,7 @@ async def _(bot: Bot, event: MessageEvent):
     await self_check.send("[自检]INFO: 开始自检...")
     if ccg != -1:
         try:
-            await bot.send_group_msg(group_id=ccg, message="[自检]INFO: 群消息验证完成")
+            await bot.send_group_msg(group_id=ccg, message="[自检]INFO: 群消息验证")
             await self_check.send(f"[自检]INFO: 群消息功能正常")
         except ActionFailed as e:
             logger.error(e)

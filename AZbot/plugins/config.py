@@ -14,3 +14,9 @@ else:
         sys.exit(0)
 
 black_list = cfg["user"]["black_list"]
+mirror = cfg["base"]["git_mirror"]
+if mirror:
+    if mirror == "ghproxy":
+        cfg["base"]["git_mirror"] = "https://ghproxy.com/"
+    elif mirror == "fastgit":
+        cfg["base"]["git_mirror"] = "https://hub.fastgit.org/"

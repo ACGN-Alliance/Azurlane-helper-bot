@@ -105,7 +105,7 @@ T_Border: TypeAlias = (             # allowed border types
 T_Image: TypeAlias = T_Path | Image.Image | bytes   # allowed image types
 
 
-FONT = "font.ttf"                   # default font file
+FONT = "./AZbot/font.ttf"                   # default font file
 TRANSPARENT: Color = (0, 0, 0, 0)   # transparent
 
 

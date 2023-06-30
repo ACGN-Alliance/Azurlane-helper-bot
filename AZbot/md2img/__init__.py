@@ -10,7 +10,7 @@ def trans_img(markdown_file: str | Path,
               *args,
               spacing: float = 0,
               inline_spacing: float = 0,
-              backgroud: str | Path = None
+              background: str | Path = None
               ) -> None:
     """
     将markdown文件转换为图片
@@ -20,7 +20,7 @@ def trans_img(markdown_file: str | Path,
     :param font_file: 字体文件路径
     :param spacing: 行间间距
     :param inline_spacing: 行内间距
-    :param backgroud: 背景图片路径
+    :param background: 背景图片路径
     :return:
     """
     md = mdp()
@@ -31,7 +31,7 @@ def trans_img(markdown_file: str | Path,
         font_file,
         spacing=spacing,
         inline_spacing=inline_spacing,
-        background=backgroud,
+        background=background,
         size=(1000, 1000)
     )
     r.render()

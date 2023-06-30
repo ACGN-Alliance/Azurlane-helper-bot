@@ -41,18 +41,25 @@ async def clear_blacklist():
     return Message("清空完成")
 
 async def get_data(type_: str):
-    if(type_ == "群"): data = await ju.get_val("data/group.json", [])
-    elif(type_ == "人"): data = await ju.get_val("data/user.json", [])
-    else: return Message("参数错误")
+    if(type_ == "群"):
+        data = await ju.get_val("data/group.json", [])
+    elif(type_ == "人"):
+        data = await ju.get_val("data/user.json", [])
+    else:
+        return Message("参数错误")
     if data is None:
         return Message("数据初始化出错，请重启bot")
     return data
 
 async def add_blacklist(type_: str, id_: str, func: str = "") -> Message:
     data = await get_data(type_)
-    if(isinstance(data, Message)): return data
+    if isinstance(data, Message):
+        return data
 
-    if(not func):
+    if not hasattr(data, "global"):
+        data["global"] = []
+
+    if not func:
         data["global"].append(int(id_))
     else:
         if(func in data.keys()):
@@ -65,7 +72,8 @@ async def add_blacklist(type_: str, id_: str, func: str = "") -> Message:
 
 async def del_blacklist(type_: str, id_: str, func: str = "") -> Message:
     data = await get_data(type_)
-    if(isinstance(data, Message)): return data
+    if(isinstance(data, Message)):
+        return data
     
     if(not func):
         for k in data.keys():
@@ -119,9 +127,9 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, args: Message = Com
         if arg[0] == "清空":
             await matcher.finish(await clear_blacklist())
         else:
-            await matcher.finish("参数不足")
+            await matcher.finish(__usage__)
     elif len(arg) == 2:
-        await matcher.finish("参数不足")
+        await matcher.finish(__usage__)
     elif len(arg) == 3:
         if arg[0] == "添加":
             await matcher.finish(await add_blacklist(arg[1], arg[2]))
@@ -134,7 +142,7 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, args: Message = Com
             elif(isinstance(lst, list)):
                 await send_forward_msg(bot, event, "封禁查询", str(event.user_id), lst)
         else:
-            await matcher.finish("参数错误")
+            await matcher.finish(__usage__)
     elif(len(arg) == 4):
         if arg[0] == "添加":
             await matcher.finish(await add_blacklist(arg[1], arg[2], arg[3]))
@@ -147,9 +155,9 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, args: Message = Com
             elif(isinstance(lst, list)):
                 await send_forward_msg(bot, event, "封禁查询", str(event.user_id), lst)
         else:
-            await matcher.finish("参数错误")
+            await matcher.finish(__usage__)
     else:
-        await matcher.finish("参数错误")
+        await matcher.finish(__usage__)
 
 ver = on_command("版本", permission=SUPERUSER)
 ver.__doc__ = """查看当前版本

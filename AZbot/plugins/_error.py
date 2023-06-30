@@ -1,5 +1,6 @@
 import os.path
 import time
+import traceback
 
 from nonebot.log import logger
 from nonebot.matcher import Matcher
@@ -43,6 +44,8 @@ async def report_error(err: str | BaseException, *args, matcher: Matcher = None,
     else:
         name = "未知函数"
     (bot, ) = get_bots().values()
+    if isinstance(err, BaseException):
+        err = traceback.format_exc()
     logger.error(f"在执行{name}时发生错误: {err}")
     if matcher:
         await matcher.send(err)

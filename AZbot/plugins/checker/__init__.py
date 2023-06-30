@@ -17,18 +17,23 @@ else:
         @scheduler.scheduled_job("interval", minutes=bili_interval)
         async def bili_notice():
             from AZbot.plugins.bili.bili_article import bili_pic
-            path = await bili_pic()
-            if(path is None):
-                return
+            await bili_pic()
+
             data = json.load(open("data/group_func.json", "r", encoding="utf-8"))
             if hasattr(data, "bili"):
                 (bot, ) = nonebot.get_bots().values()
                 for group in data["bili"]:
-                    await bot.send_group_msg(group_id=group, message="[CQ:image,file=file:///" + path + "]")
+                    await bot.send_group_msg(
+                        group_id=group,
+                        message="[CQ:image,file=file:///" + os.path.join(os.getcwd(), "data/bili/bili_temp.png") + "]"
+                    )
 
                 ccg = cfg["user"]["ccg"]
                 if ccg != -1:
-                    await bot.send_group_msg(user_id=ccg, message="消息已推送至" + str(len(data["bili"])) + "个群")
+                    await bot.send_group_msg(
+                        user_id=ccg,
+                        message="消息已推送至" + str(len(data["bili"])) + "个群"
+                    )
 
 auto_clean = cfg["func"]["equip_render_auto_clean"]
 if(not isinstance(auto_clean, int)):

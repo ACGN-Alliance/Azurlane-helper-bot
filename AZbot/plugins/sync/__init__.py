@@ -26,7 +26,7 @@ update_data = on_command("更新数据", permission=SUPERUSER)
 async def _():
     await update_data.send("正在更新数据...")
     try:
-        if await sync_repo():
+        if sync_repo():
             await update_data.send("更新完成")
     except Exception as e:
         await report_error(format_exc(), update_data)

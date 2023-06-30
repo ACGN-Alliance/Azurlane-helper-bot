@@ -22,8 +22,6 @@ from nonebot import on_command
 from nonebot.params import CommandArg
 from nonebot.matcher import Matcher
 
-from typing import Annotated
-
 from AZbot.plugins.checker.rule_check import event_handle
 from AZbot.plugins.utils import send_forward_msg
 from AZbot.plugins.utils import CDTime as cd

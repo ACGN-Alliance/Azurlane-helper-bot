@@ -52,7 +52,7 @@ class MarkDownParser:
         }
         return node
 
-    def _info(self, info: str) -> dict:
+    def _info(self):
         def find_kv(key: str):
             regex = rf"^{key}: (.*?)(\\s|$)"
             matches = re.finditer(regex, self.info, re.MULTILINE)
@@ -80,7 +80,7 @@ class MarkDownParser:
             else:
                 if self._stack[-1] == "---":
                     self._stack.pop()
-                    self._info(self.info)
+                    self._info()
                     self.info_parse = False
                     return []
 

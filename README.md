@@ -8,30 +8,38 @@
 > 作者学业繁忙, 更新速度会很慢, 请谅解
 > (快来点人帮咱开发吧呜呜呜，写代码好折磨)
 
-本仓库使用的数据来自于[nonebot-plugin-azurlane-assistant-data](https://github.com/ACGN-Alliance/nonebot-plugin-azurlane-assistant-data)，为作者自爬数据  
+本仓库使用的数据绝大多数来自于[nonebot-plugin-azurlane-assistant-data](https://github.com/ACGN-Alliance/nonebot-plugin-azurlane-assistant-data)，为作者自爬数据  
 ## 功能
 - :ship: 模拟建造(支持轻型重型特型以及限定池)
 - :airplane: 装备参数查询
 - :green_circle: 服务器状态查询
+- :tv: b站官方动态推送
 
 ## 实用功能
 - :black_large_square: 各功能的黑名单
 - :1234: 自动化数据同步
 - :smile: 基础关键词回复
 - :dvd: Gitee 国内镜像源数据
+- :vertical_traffic_light: 基础群管
+- :beginner: 欢迎语定制
 
 ## 文档
 [AZbot-Docs](https://acgn-alliance.github.io/AZbot-docs/#/)
+
 ## TODO
-- [ ] 碧蓝航线官方B站动态推送(预计使用 [bilibili-api](https://github.com/Nemo2011/bilibili-api) + PIL 实现)  
+- [x] 碧蓝航线官方B站动态推送(预计使用 [bilibili-api](https://github.com/Nemo2011/bilibili-api) + PIL 实现)  
 - [x] 为建造模拟器建造结果添加舰船图标
 - [ ] 装备图与舰娘介绍图的渲染
-- [ ] 完成[blhx-wiki-mirai](https://gitee.com/arisaka-iris/blhx-wiki-mirai-plugin)插件功能的移植
-- [ ] 一键启动脚本
+- [x] 一键启动脚本
 - [ ] 上架 Nonebot 商店
 - [ ] 好看的功能菜单
-- [ ] 使用文档(可能会搞个 Github Page )
+- [x] 使用文档(可能会搞个 Github Page)
 - [ ] 动态修改配置
+- [ ] 完善错误处理
+- [ ] 制作docker镜像
+
+## 已知 bug
+- 服务器状态推送有时会出现`timeout`报错([已用try except处理](./AZbot/plugins/server_status/util.py) L43), 原因不明, 可尝试将`config.yaml`中`server_status_monitor_refresh_time`参数调大以减少报错
 
 ## 关于授权
 本项目当中使用的 [blhx-wiki](https://github.com/DK09/blhx-wiki) 内容已获得原作者授权(授权图如下，加载不出请开魔法)

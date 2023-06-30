@@ -6,7 +6,7 @@ from nonebot import get_driver, get_bots
 from nonebot.log import default_format
 
 from AZbot.plugins.sync.operation import *
-from AZbot.plugins.server_status.uti import check
+from AZbot.plugins.server_status.util import check
 from AZbot.plugins.config import cfg
 from nonebot_plugin_apscheduler import scheduler
 
@@ -16,6 +16,24 @@ async def _(bot: Bot):
     if cfg["base"]["startup_notify"]:
         for user in get_driver().config.superusers:
             await bot.send_private_msg(user_id=int(user), message="Bot已启动")
+
+    su = ()
+    ccg = cfg["user"]["ccg"]
+    for user in cfg["user"]["super_admin"]:
+        su += (str(user), )
+
+    if ccg != -1:
+        try:
+            (bot, ) = get_bots().values()
+            mem_lst = await bot.call_api("get_group_member_list", group_id=ccg)
+            for mem in mem_lst:
+                if str(mem) in su:
+                    continue
+                su += (str(mem["user_id"]), )
+        except:
+            logger.error("无法获取ccg群成员列表, 请检查配置文件中ccg的值是否正确")
+
+    get_driver().config.superusers = su
 
 @driver.on_startup
 async def init():
@@ -56,21 +74,3 @@ async def init():
             logger.info(f"server_status_monitor_refresh_time{auto_check}, 正常范围为1~1440, 定时检查将不会生效")
         else:
             scheduler.add_job(check, "interval", seconds=auto_check)
-
-    su = ()
-    ccg = cfg["user"]["ccg"]
-    for user in cfg["user"]["super_admin"]:
-        su += (str(user), )
-
-    if ccg != -1:
-        try:
-            (bot, ) = get_bots().values()
-            mem_lst = bot.call_api("get_group_member_list", group_id=ccg)
-            for mem in mem_lst:
-                if str(mem) in su:
-                    continue
-                su += (str(mem["user_id"]), )
-        except:
-            logger.error("无法获取ccg群成员列表, 请检查配置文件中ccg的值是否正确")
-
-    get_driver().config.superusers = su

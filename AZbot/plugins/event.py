@@ -26,7 +26,7 @@ async def _(bot: Bot, event: MessageEvent, e: Exception):
         extra_msg = ""
         logger.error(str(e))
 
-    await report_error(str(e), bot, event)
+    await report_error(e, bot, event)
 
     # msg = f"事件处理出现错误: {type(e)}---{e}" + extra_msg
     # await bot.send_private_msg(user_id=int(get_driver().config.superusers.pop()), message=msg)

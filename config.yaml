@@ -33,6 +33,10 @@ base:
   # git代理修改
   # global为全局代理（推荐），local为仅修改本仓库代理，none为不修改代理
   git_proxy: "global"
+  # git clone 镜像源
+  # 默认为原生github
+  # 可选有 ghproxy、fastgit
+  git_mirror: ""
   # 是否在启动时私聊发送通知
   startup_notify: false
   # 是否在启动时更新数据
@@ -90,7 +94,7 @@ func:
   build_output_mode: "forward"
   # 服务器状态监测刷新间隔
   # 单位：秒
-  server_status_monitor_refresh_time: 60
+  server_status_monitor_refresh_time: 120
 
 develop:
   # 是否开启调试模式
