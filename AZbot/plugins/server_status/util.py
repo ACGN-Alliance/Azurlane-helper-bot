@@ -56,22 +56,29 @@ async def get_server_state(name: str, *args, need_to_check: bool=True):
             write_data[name] = {server["name"]: server["state"]}
         await ju.update_whole_file(data_dir, write_data)
 
+    is_updated = False
     for server in resp.json():
         server_name = server["name"]
         status = server["state"]
         if need_to_check:
             if ori_data.get(name):
                 if not ori_data[name].get(server_name):
-                    ori_data[name].update({server["name"]: server["state"]})
-                    continue
+                    ori_data[name].update({server_name: status})
+                    is_updated = True
+
                 if ori_data[name][server_name] == status:
                     continue
+                else:
+                    ori_data[name][server_name] = status
+                    is_updated = True
+            else:
+                ori_data[name] = {server_name: status}
+                is_updated = True
 
-        is_updated = True
         ori_data[name] = {server["name"]: server["state"]}
         msg += Message(f"{server['name']}：{all_status[server['state']]}, 状态码：{server['state']}\n")
 
-    if is_updated:
+    if not is_updated:
         await ju.update_whole_file(data_dir, ori_data)
         t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         return msg + Message(f"\n更新时间：{t}")

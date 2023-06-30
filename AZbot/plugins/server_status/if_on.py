@@ -53,7 +53,7 @@ async def _(matcher: Matcher, event: MessageEvent, arg: Message = CommandArg()):
         await monitor.finish(__usage__)
     elif len(arg_lst) == 1:
         if arg_lst[0] == "开启":
-            await turn_on(matcher, server_name_=all_available_server_name)
+            await turn_on(matcher, server_name_="官服")
         elif arg_lst[0] == "关闭":
             await turn_off(matcher)
         elif arg_lst[0] == "查询":
