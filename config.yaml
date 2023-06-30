@@ -1,0 +1,112 @@
+# 此文件为Azurlane-helper-bot的配置文件
+# 文件链接： https://github.com/ACGN-Alliance/Azurlane-helper-bot/blob/master/config.yaml
+# 请不要随意乱改config.yaml文件，以免出现错误
+# 出现问题请从仓库文件中下载新的config.yaml文件替换原有文件
+
+user:
+  # 超级管理员QQ号
+  # 可填写多个，填0则没有
+  # 最上面一个会接收到好友申请以及自检消息，其他的无法接收
+  # TODO 功能转移至中控群
+  super_admin:
+    - 3237231778
+    - 0
+  # 黑名单QQ号
+  # 可填写多个，填0则没有
+  black_list:
+    - 0
+  # 是否接收入群申请
+  can_invited_to_group: false
+  # 是否接收好友申请
+  can_invited_to_friend: false
+  # 中心控制群
+  # 用于接收机器人的运行状态以及报错的群
+  # 或者执行超管命令
+  # WARNING: 此群人员默认拥有超管权限，请谨慎设置
+  ccg: -1
+
+base:
+  # 代理地址
+  # 如需使用代理请填写代理地址，否则请留空
+  # exp: http://127.0.0.1:7890
+  network_proxy: "http://127.0.0.1:7890"
+  # git代理修改
+  # global为全局代理（推荐），local为仅修改本仓库代理，none为不修改代理
+  git_proxy: "global"
+  # git clone 镜像源
+  # 默认为原生github
+  # 可选有 ghproxy、fastgit
+  git_mirror: ""
+  # 是否在启动时私聊发送通知
+  startup_notify: false
+  # 是否在启动时更新数据
+  # false仅供调试使用，正常使用请设置为true！
+  # ！！！注意：第一次启动若未设置为false,则运行时会报错！！！
+  startup_update: true
+  # 自动更新间隔
+  # 单位：分钟
+  # -1为关闭自动更新
+  # 注意：为防止网络因素等影响，建议设置在5分钟以上
+  # 即使设置了时间仍需要手动开启自动更新才会生效
+  auto_update_time: -1
+  # 忽略同步错误
+  # 若关闭，同步出现错误时将会停止运行
+  ignore_sync_error: true
+  # 默认冷却时间
+  # 单位：秒
+  # 优先级：func > global
+  # 可以在func下设置单独的冷却时间
+  # 格式： 功能名: 冷却时间
+  default_cooldown_time:
+    - func:
+        test: 10
+    - global: 60
+  # 冷却时间忽略管理员
+  admin_ignore_cd: false
+
+bili:
+  # 动态自动推送间隔时间
+  # 单位：分钟
+  auto_push_time: 10
+
+func:
+  # 装备渲染模式
+  # 可选：cache, real_time。
+  # cache为缓存模式(渲染过一次后图片会保存在本地)，real_time为实时渲染模式
+  # cache优点：发送速度快，缺点：占用磁盘空间大（可达数GB）
+  # real_time优点：不占用磁盘空间，缺点：发送速度慢、耗费性能
+  equip_render_mode: "real_time"
+  # 装备渲染临时文件夹
+  # 留空则为默认路径(格式："/data/...", 根目录为nb run运行目录)
+  # 仅在装备渲染模式为cache时有效
+  equip_tmp_dir: ""
+  # 装备渲染缓存自动清理时间
+  # 单位: 小时
+  # -1为关闭自动清理
+  equip_render_auto_clean: -1
+  # 图片源地址
+  # 若为本地文件，直接写地址，无需加file:///
+  # 通常不需要修改, 如果有可以设置自己的图片源
+  image_path: "data/remote/image"
+  # 模拟建造输出消息模式
+  # 可选：image(暂不可用，将在未来加入), forward。
+  # image为图片模式，forward为合并转发模式
+  build_output_mode: "forward"
+  # 服务器状态监测刷新间隔
+  # 单位：秒
+  server_status_monitor_refresh_time: 120
+
+develop:
+  # 是否开启调试模式
+  debug: false
+  # 强制克隆数据仓库
+  # 数据同步出现bug时使用
+  # 如报错InvalidGitRepositoryError
+  force_clone_repo: false
+  # 日志最大缓存大小
+  # 单位：MB
+  log_max_cache_size: 20
+  # 日志最大缓存数量
+  # 单位：个
+  # 推荐设置为3,但不得小于1
+  log_max_cache_num: 3
