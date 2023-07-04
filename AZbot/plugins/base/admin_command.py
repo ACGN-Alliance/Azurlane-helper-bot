@@ -13,7 +13,7 @@ from AZbot.plugins.json_utils import JsonUtils as ju
 from AZbot.plugins.sync.operation import local_and_remote_ver
 
 from typing import List
-import json, asyncio
+import json, traceback
 
 __version__ = "0.0.1-dev"
 

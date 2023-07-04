@@ -92,7 +92,6 @@ async def build_simulator(
                         break
 
             if not is_selected:
-                await report_error(DataMeteringException("建造池"))
                 raise DataMeteringException("建造池")
 
     return result_lst

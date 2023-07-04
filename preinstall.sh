@@ -96,8 +96,8 @@ read -p "是否需要安装 nonebot-plugin-gocqhttp? [y/n(default)] " -n 1 -r -a
       install_gocq=(n)
   fi
 if [[ ${install_gocq[0]} =~ ^[Yy]$ ]]; then
-        echo 正在安装 nonebot-plugin-gocqhttp...
-        pip install nonebot-plugin-gocqhttp
+    echo 正在安装 nonebot-plugin-gocqhttp...
+    pip install nonebot-plugin-gocqhttp
 fi
 
 echo 安装全部完成, 请修改config.yaml文件适应自己的需求, 完成后请输入 nb run --reload 启动

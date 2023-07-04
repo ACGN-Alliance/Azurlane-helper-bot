@@ -1,3 +1,14 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+@Author         : mrslouzk
+@Date           : 2023/4/20
+@LastEditors    : mrslouzk
+@LastEditTime   : 2023/6/1
+@Description    : bili订阅
+@GitHub         : https://github.com/MRSlouzk
+"""
+
 import os.path
 
 from nonebot import on_command

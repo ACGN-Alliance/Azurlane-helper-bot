@@ -8,7 +8,6 @@ from nonebot.adapters.onebot.v11 import (
 )
 from nonebot import on_command, on_notice, on_message
 from nonebot.permission import SUPERUSER as SU
-from nonebot.typing import T_State
 
 from AZbot.plugins.checker.rule_check import chat_handle, notice_handle
 from AZbot.plugins.json_utils import JsonUtils as ju

@@ -28,8 +28,8 @@ async def _():
     try:
         if sync_repo():
             await update_data.send("更新完成")
-    except Exception as e:
-        await report_error(format_exc(), update_data)
+    except:
+        await report_error(format_exc(), func="update_data")
         await update_data.send("更新失败, 请检查后台输出")
 
 query_update = on_command("查询更新", permission=SUPERUSER)

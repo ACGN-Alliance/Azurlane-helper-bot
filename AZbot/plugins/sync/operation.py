@@ -1,8 +1,9 @@
 from git import Repo
-import os, sys, json, pathlib
+import os, traceback, json, pathlib
 from subprocess import Popen, DEVNULL, call, PIPE
 
 from AZbot.plugins.config import cfg
+from AZbot.plugins._error import report_error
 
 from nonebot import logger
 
