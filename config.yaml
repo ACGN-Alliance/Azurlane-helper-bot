@@ -2,6 +2,7 @@
 # 文件链接： https://github.com/ACGN-Alliance/Azurlane-helper-bot/blob/master/config.yaml
 # 请不要随意乱改config.yaml文件，以免出现错误
 # 出现问题请从仓库文件中下载新的config.yaml文件替换原有文件
+# 配置文件版本: 1.0.0
 
 user:
   # 超级管理员QQ号
@@ -9,7 +10,6 @@ user:
   # 最上面一个会接收到好友申请以及自检消息，其他的无法接收
   # TODO 功能转移至中控群
   super_admin:
-    - 3237231778
     - 0
   # 黑名单QQ号
   # 可填写多个，填0则没有
@@ -29,7 +29,7 @@ base:
   # 代理地址
   # 如需使用代理请填写代理地址，否则请留空
   # exp: http://127.0.0.1:7890
-  network_proxy: "http://127.0.0.1:7890"
+  network_proxy: ""
   # git代理修改
   # global为全局代理（推荐），local为仅修改本仓库代理，none为不修改代理
   git_proxy: "global"
@@ -41,7 +41,7 @@ base:
   startup_notify: false
   # 是否在启动时更新数据
   # false仅供调试使用，正常使用请设置为true！
-  # ！！！注意：第一次启动若未设置为false,则运行时会报错！！！
+  # ！！！注意：第一次启动若未设置为true,则运行时会报错！！！
   startup_update: true
   # 自动更新间隔
   # 单位：分钟
