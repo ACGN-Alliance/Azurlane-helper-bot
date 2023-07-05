@@ -1,3 +1,5 @@
+import traceback
+
 from nonebot.message import run_postprocessor
 from nonebot.adapters.onebot.v11 import Bot, MessageEvent
 from nonebot.exception import ActionFailed, WebSocketClosed
@@ -26,7 +28,7 @@ async def _(bot: Bot, event: MessageEvent, e: Exception):
         extra_msg = ""
         logger.error(str(e))
 
-    await report_error(e, bot, event)
+    await report_error(traceback.format_exc(), bot, event)
 
     # msg = f"事件处理出现错误: {type(e)}---{e}" + extra_msg
     # await bot.send_private_msg(user_id=int(get_driver().config.superusers.pop()), message=msg)

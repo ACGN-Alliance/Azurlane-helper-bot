@@ -25,7 +25,10 @@ from nonebot.matcher import Matcher
 from AZbot.plugins.checker.rule_check import event_handle
 from AZbot.plugins.utils import send_forward_msg
 from AZbot.plugins.utils import CDTime as cd
+from AZbot.plugins._error import report_error
 from .simulator import build_simulator
+
+import traceback
 
 bsm = on_command("模拟建造", rule=event_handle)
 @bsm.handle()
@@ -53,8 +56,11 @@ async def build_sim(bot: Bot, event: MessageEvent, matcher: Matcher, arg: Messag
                 await bsm.finish("抽取次数过少")
     else:
         await bsm.finish("参数过多")
-    
-    result = await build_simulator(args[0], num)
+
+    try:
+        result = await build_simulator(args[0], num)
+    except:
+        await report_error(traceback.format_exc(), matcher=matcher)
     msg_lst = []
     for data in result:
         ship_name = data["ship"]
@@ -63,6 +69,7 @@ async def build_sim(bot: Bot, event: MessageEvent, matcher: Matcher, arg: Messag
         try:
             msg = Message(f"舰娘: {ship_name}\n稀有度: {prob}") + MessageSegment.image(img_url)
         except:
+            await report_error(traceback.format_exc(), matcher=matcher)
             await bsm.finish("获取舰船图标失败, 取消本次抽取")
         msg_lst.append(msg)
     await send_forward_msg(bot, event, "建造模拟器", str(bot.self_id), msg_lst)

@@ -43,6 +43,7 @@ async def _(matcher: Matcher, event: MessageEvent, arg: Message = CommandArg()):
             await matcher_.finish(f"对应服务器状态监测已关闭")
 
     arg_lst = arg.extract_plain_text().split()
+
     if isinstance(event, GroupMessageEvent):
         id_ = event.group_id
         type_ = "group"
@@ -64,6 +65,7 @@ async def _(matcher: Matcher, event: MessageEvent, arg: Message = CommandArg()):
                 await monitor.send("服务器状态未更新")
         else:
             await monitor.finish(__usage__)
+
     elif len(arg_lst) == 2:
         server_name = arg_lst[1:]
         for server in server_name:
@@ -81,6 +83,7 @@ async def _(matcher: Matcher, event: MessageEvent, arg: Message = CommandArg()):
                 await monitor.send("服务器状态未更新")
         else:
             await monitor.finish(__usage__)
+
     elif len(arg_lst) == 3:
         server_name = arg_lst[1:-1]
         for server in server_name:

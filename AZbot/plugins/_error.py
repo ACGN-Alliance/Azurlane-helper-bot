@@ -28,12 +28,10 @@ def error_handler(func):
             logger.error(format_exc())
     return wrapper
 
-async def report_error(err: str | BaseException, *args, matcher: Matcher = None, func: str = ""):
+async def report_error(err: str | None, *args, matcher: Matcher = None, func: str = ""):
     """
     错误上报函数, 并保存至error.log
     """
-    if isinstance(err, BaseException):
-        err = str(err)
 
     if not os.path.exists("logs"):
         os.mkdir("logs")
@@ -44,8 +42,7 @@ async def report_error(err: str | BaseException, *args, matcher: Matcher = None,
     else:
         name = "未知函数"
     (bot, ) = get_bots().values()
-    if isinstance(err, BaseException):
-        err = traceback.format_exc()
+
     logger.error(f"在执行{name}时发生错误: {err}")
     if matcher:
         await matcher.send(err)

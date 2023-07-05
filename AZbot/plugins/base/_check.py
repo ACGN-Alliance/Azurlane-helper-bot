@@ -17,10 +17,11 @@ from nonebot.log import logger
 from nonebot.adapters.onebot.v11 import Message, MessageEvent, Bot, GroupMessageEvent
 from nonebot.permission import SUPERUSER
 from nonebot.exception import ActionFailed
-import httpx, asyncio
+import httpx, asyncio, traceback
 
 from AZbot.plugins.config import cfg
 from AZbot.plugins.utils import send_forward_msg
+from AZbot.plugins._error import report_error
 
 self_check = on_command("自检", permission=SUPERUSER)
 self_check.__doc__ = """用于检测机器人是否可以正常运行

@@ -1,23 +1,25 @@
 from nonebot.typing import T_State
 from nonebot.permission import SUPERUSER
-from nonebot.adapters.onebot.v11 import (MessageEvent, 
-                                        GroupMessageEvent,
-                                        PrivateMessageEvent, 
-                                        GroupIncreaseNoticeEvent,
-                                        NoticeEvent,
-                                        Event,
-                                        Bot)
+from nonebot.adapters.onebot.v11 import (MessageEvent,
+                                         GroupMessageEvent,
+                                         PrivateMessageEvent,
+                                         GroupIncreaseNoticeEvent,
+                                         NoticeEvent,
+                                         Event,
+                                         Bot)
 from nonebot import get_driver
 import json
 
 from AZbot.plugins.config import black_list
 from AZbot.plugins.sync.operation import local_file_check
 
+
 async def event_handle(event: Event, bot: Bot, state: T_State) -> bool:
     """
     事件处理器
 
     """
+
     async def user_check(user_id: int) -> bool:
         if str(user_id) in get_driver().config.superusers:
             return True
@@ -58,13 +60,13 @@ async def event_handle(event: Event, bot: Bot, state: T_State) -> bool:
             except FileNotFoundError:
                 local_file_check()
                 return False
-            if(await user_check(event.user_id)):
+            if (await user_check(event.user_id)):
                 return True
             else:
                 await bot.send_group_msg(group_id=event.group_id, message="您没有权限使用此命令")
                 return False
         if event.group_id not in text[cmd]:
-            if(await user_check(event.user_id)):
+            if (await user_check(event.user_id)):
                 return True
             else:
                 await bot.send_group_msg(group_id=event.group_id, message="您没有权限使用此命令")
@@ -72,26 +74,28 @@ async def event_handle(event: Event, bot: Bot, state: T_State) -> bool:
         else:
             await bot.send_group_msg(group_id=event.group_id, message="本群没有权限使用此命令")
             return False
-    elif(isinstance(event, PrivateMessageEvent)):
+    elif (isinstance(event, PrivateMessageEvent)):
         if (await user_check(event.user_id)):
             return True
         else:
             await bot.send_private_msg(user_id=event.user_id, message="您没有权限使用此命令")
             return False
-        
+
     else:
         return True
 
+
 async def _if_exist_func(data: dict, file: str, key: str):
-    if(data.get(key) is None):
+    if (data.get(key) is None):
         data.update({key: []})
         open(file, "w", encoding="utf-8").write(json.dumps(data))
         return False
     else:
         return True
 
+
 async def notice_handle(event: NoticeEvent):
-    if(isinstance(event, GroupIncreaseNoticeEvent)):
+    if (isinstance(event, GroupIncreaseNoticeEvent)):
         try:
             text = json.load(open("data/group_func.json", "r", encoding="utf-8"))
         except FileNotFoundError:
@@ -99,13 +103,16 @@ async def notice_handle(event: NoticeEvent):
             return False
         _if = await _if_exist_func(text, "data/group_func.json", "group_welcome")
         if not _if: return False
-        if(event.group_id in text["group_welcome"]): return True
-        else: return False
+        if (event.group_id in text["group_welcome"]):
+            return True
+        else:
+            return False
     else:
         return False
 
+
 async def chat_handle(event: MessageEvent):
-    if(not isinstance(event, GroupMessageEvent)): return False
+    if (not isinstance(event, GroupMessageEvent)): return False
     try:
         text = json.load(open("data/group_func.json", "r", encoding="utf-8"))
     except FileNotFoundError:
@@ -113,8 +120,11 @@ async def chat_handle(event: MessageEvent):
         return False
     _if = await _if_exist_func(text, "data/group_func.json", "group_chat")
     if not _if: return False
-    if(event.group_id in text["group_chat"]): return True
-    else: return False
+    if (event.group_id in text["group_chat"]):
+        return True
+    else:
+        return False
+
 
 async def bili_handle(event: GroupMessageEvent):
     try:
@@ -124,5 +134,7 @@ async def bili_handle(event: GroupMessageEvent):
         return False
     _if = await _if_exist_func(text, "data/group_func.json", "bili")
     if not _if: return False
-    if(event.group_id in text["bili"]): return True
-    else: return False
+    if (event.group_id in text["bili"]):
+        return True
+    else:
+        return False

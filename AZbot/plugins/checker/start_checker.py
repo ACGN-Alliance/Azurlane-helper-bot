@@ -1,5 +1,5 @@
 import os.path
-import shutil
+import shutil, traceback
 
 from nonebot.adapters.onebot.v11 import Bot
 from nonebot import get_driver, get_bots
@@ -8,6 +8,7 @@ from nonebot.log import default_format
 from AZbot.plugins.sync.operation import *
 from AZbot.plugins.server_status.util import check
 from AZbot.plugins.config import cfg
+from AZbot.plugins._error import report_error
 from nonebot_plugin_apscheduler import scheduler
 
 driver = get_driver()
@@ -31,6 +32,7 @@ async def _(bot: Bot):
                     continue
                 su += (str(mem["user_id"]), )
         except:
+            await report_error(traceback.format_exc(), func="start_checker")
             logger.error("无法获取ccg群成员列表, 请检查配置文件中ccg的值是否正确")
 
     get_driver().config.superusers = su
